@@ -2,7 +2,7 @@ import math
 import spacy
 
 # Load spaCy NER model
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_trf")
 
 dataset = [
     ["Ahok modus manipulasi ktp", "Ahok modus pembuatan sertifikat", "jokowi natuna ratas imam bonjol"],
@@ -78,4 +78,3 @@ for i, inner_result in enumerate(result):
         print("Total Timeslot:", item["ttimeslot"])
         print()
     print()
-
