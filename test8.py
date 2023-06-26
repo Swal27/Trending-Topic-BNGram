@@ -3,26 +3,28 @@ import matplotlib.pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 from scipy.spatial.distance import squareform
 import os
+import json
+import mariadb
 
-# Define the dataset
-dataset = [
-    "Ahok modus manipulasi ktp",
-    "Ahok modus pembuatan sertifikat",
-    "jokowi natuna ratas imam bonjol"
-]
+mydb = mariadb.connect(
+    host="localhost",
+    user="root",
+    passwd="",
+    database="trending_topic"
+)
 
-# Define the bigrams
-bigrams = [
-    ('Ahok', 'modus'),
-    ('modus', 'manipulasi'),
-    ('manipulasi', 'ktp'),
-    ('modus', 'pembuatan'),
-    ('pembuatan', 'sertifikat'),
-    ('jokowi', 'natuna'),
-    ('natuna', 'ratas'),
-    ('ratas', 'imam'),
-    ('imam', 'bonjol')
-]
+cursor = mydb.cursor()
+
+# Fetch the dataset from the table raw_tweet and attribute text_process
+cursor.execute("SELECT text_process FROM rawtweet")
+dataset = [row[0] for row in cursor.fetchall()]
+
+# Fetch the bigrams from the table result_table and attribute bigram
+cursor.execute("SELECT bigram FROM result_table")
+bigrams = [tuple(row[0].split()) for row in cursor.fetchall()]
+
+# Close the database connection
+mydb.close()
 
 # Create the tweet-bigram matrix
 n_tweets = len(dataset)
@@ -35,17 +37,6 @@ for i, tweet in enumerate(dataset):
         if all(word in tweet for word in bigram):
             tweet_bigram_matrix[i, j] = 1
 
-# Print the tweet-bigram matrix
-print("+----------------------+-----------+-----------+-----------+")
-print("| Bi-gram              |   Tweet 1 |   Tweet 2 |   Tweet 3 |")
-print("+======================+===========+===========+===========+")
-for j, bigram in enumerate(bigrams):
-    print(f"| {' '.join(bigram):20s} |", end=" ")
-    for i in range(n_tweets):
-        print(f"    {tweet_bigram_matrix[i, j]:2d}    |", end=" ")
-    print()
-print("+----------------------+-----------+-----------+-----------+")
-
 # Compute the group average linkage distances
 dist_matrix = np.zeros((n_bigrams, n_bigrams))
 for i in range(n_bigrams):
@@ -57,25 +48,6 @@ for i in range(n_bigrams):
         dist_matrix[i, j] = dist
         dist_matrix[j, i] = dist
 
-# Print the distance matrix
-print("\nDistance Matrix:")
-for i in range(n_bigrams):
-    print("+----------------------+ ", end="")
-print()
-for i in range(n_bigrams):
-    print(f"| {bigrams[i][0]:<10s} {bigrams[i][1]:<10s} | ", end="")
-print()
-for i in range(n_bigrams):
-    print("+----------------------+ ", end="")
-print()
-for i in range(n_bigrams):
-    for j in range(n_bigrams):
-        print(f"| {dist_matrix[i, j]:8.3f} ", end="")
-    print("|")
-for i in range(n_bigrams):
-    print("+----------------------+ ", end="")
-print()
-
 # Specify the folder path to save the dendrogram figures
 output_folder = "C:/Users/ACER/Documents/Kuliah/Semester 6/KKP/Trending Topic/dendogram fig"
 
@@ -85,55 +57,23 @@ condensed_dist_matrix = squareform(dist_matrix)
 # Compute the linkage matrix
 Z = linkage(condensed_dist_matrix, method='average')
 
-# Plot the initial dendrogram
+# Plot and save the last iteration dendrogram
+last_iteration = n_bigrams - 1
 fig, ax = plt.subplots(figsize=(8, 6))
 dendrogram(Z, labels=[f"{bigram[0]} {bigram[1]}" for bigram in bigrams], ax=ax)
-plt.title("Hierarchical Diagram (Iteration: 0)")
+plt.title(f"Hierarchical Diagram (Iteration: {last_iteration})")
 plt.xlabel("Bigrams")
 plt.ylabel("Distance")
 plt.tight_layout()
-
-# Save the initial dendrogram figure
-output_file = os.path.join(output_folder, "dendrogram_0.png")
+output_file = os.path.join(output_folder, f"dendrogram_{last_iteration}.png")
 plt.savefig(output_file)
 plt.close()
-
-# Perform hierarchical clustering
-cluster_labels = []
-for i in range(1, n_bigrams):
-    cluster = {"bigram": bigrams[i], "distance": dist_matrix[i, 0], "size": 1}
-    cluster_labels.append(cluster)
-
-    # Update the distance matrix with group average linkage formula
-    for j in range(1, i):
-        a = ((tweet_bigram_matrix[:, i] > 0) & (tweet_bigram_matrix[:, j] > 0)).sum()
-        b = (tweet_bigram_matrix[:, i] > 0).sum()
-        c = (tweet_bigram_matrix[:, j] > 0).sum()
-        dist = 1 - a / min(b, c)
-        dist_matrix[i, j] = dist
-        dist_matrix[j, i] = dist
-
-    # Compute the linkage matrix for the current iteration
-    Z = linkage(dist_matrix[:i + 1, :i + 1], method='average')
-
-    # Plot the dendrogram for the current iteration
-    fig, ax = plt.subplots(figsize=(8, 6))
-    dendrogram(Z, labels=[f"{bigram[0]} {bigram[1]}" for bigram in bigrams[:i + 1]], ax=ax)
-    plt.title(f"Hierarchical Diagram (Iteration: {i})")
-    plt.xlabel("Bigrams")
-    plt.ylabel("Distance")
-    plt.tight_layout()
-
-    # Save the dendrogram figure for the current iteration
-    output_file = os.path.join(output_folder, f"dendrogram_{i}.png")
-    plt.savefig(output_file)
-    plt.close()
 
 # Determine the clustering labels
 num_clusters = 2
 labels = fcluster(Z, num_clusters, criterion='maxclust')
 
-# Print the clustering results
+# Create a dictionary to store the cluster data
 clusters = {}
 for i, bigram in enumerate(bigrams):
     cluster_label = labels[i]
@@ -141,9 +81,18 @@ for i, bigram in enumerate(bigrams):
         clusters[cluster_label] = []
     clusters[cluster_label].append(bigram)
 
-print(f"Bigrams in {num_clusters} Clusters:")
-for cluster_label, bigrams in clusters.items():
-    print(f"Cluster {cluster_label}:")
-    for bigram in bigrams:
-        print(bigram)
-    print()
+# Extract the last two clusters
+last_two_clusters = list(clusters.values())[-2:]
+
+# Create a dictionary to store the last two clusters
+last_clusters_data = {}
+for i, cluster in enumerate(last_two_clusters, 1):
+    cluster_label = f"Cluster {i}"
+    last_clusters_data[cluster_label] = [f"{bigram[0]} {bigram[1]}" for bigram in cluster]
+
+# Save the last two clusters as JSON
+json_output_file = os.path.join(output_folder, "last_clusters_data.json")
+with open(json_output_file, "w") as file:
+    json.dump(last_clusters_data, file, indent=4)
+
+print("Last two clusters data exported as JSON successfully.")

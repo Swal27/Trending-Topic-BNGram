@@ -2,7 +2,6 @@ import tweepy
 import sys
 import string
 import re
-from cleantext import clean
 import mariadb
 from datetime import datetime, timedelta, timezone
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
@@ -27,18 +26,17 @@ mycursor.execute("SELECT * FROM rawtweet")
 myresult = mycursor.fetchall()
 
 for x in myresult:
-    hasil = re.sub("@[A-Za-z0-9_]+","", x[2])
-    hasil = re.sub("#[A-Za-z0-9_]+","", hasil)
+    hasil = re.sub("@[A-Za-z0-9_]+", "", x[2])
+    hasil = re.sub("#[A-Za-z0-9_]+", "", hasil)
     hasil = re.sub(r'http\S+', '', hasil)
     hasil = re.sub("RT : ", "", hasil)
     hasil = " ".join(hasil.split())
-    hasil = clean(hasil, no_emoji=True)
     hasil = hasil.translate(str.maketrans('', '', string.punctuation))
-    #stemming
+    # stemming
     hasil_stem = stemmer.stem(hasil)
 
-    #stopword
+    # stopword
     hasil_stop = stopword.remove(hasil_stem)
 
-    mycursor.execute("UPDATE rawtweet SET text_process = %s WHERE id = %d", (hasil_stop,x[0]))
+    mycursor.execute("UPDATE rawtweet SET text_process = %s WHERE id = %d", (hasil_stop, x[0]))
     mydb.commit()
