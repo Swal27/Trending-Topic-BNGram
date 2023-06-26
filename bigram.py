@@ -104,7 +104,7 @@ for i, inner_result in enumerate(result):
         print()
 
         # Insert the result into the database
-        insert_query = "INSERT INTO result_table (bigram, df, idf, dfidf, boost, previous_bigram, total_timeslot) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        insert_query = "INSERT INTO result_table (bigram, df, idf, dfidf, boost, previous_bigram, ttimeslot) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         values = (
             item["bigram"],
             item["df"][1],  # Assuming df is a list [index, frequency]
