@@ -18,7 +18,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/animate.min.css";
@@ -29,7 +29,10 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import { isServiceWorkerRegistered, registerServiceWorker } from "utils/swRegister.js";
 
-import AdminLayout from "layouts/Admin.js";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import ProcessReducer from "Stores/ProcessReducer";
+import AppRouter from "routes/router";
 
 
 
@@ -41,11 +44,14 @@ if (!isServiceWorkerRegistered() && 'serviceWorker' in navigator) {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+const store = configureStore({
+  reducer: {
+    process: ProcessReducer,
+  }
+})
+
 root.render(
-  <BrowserRouter>
-    <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Redirect from="/" to="/admin/dashboard" />
-    </Switch>
-  </BrowserRouter>
+  <Provider store={store}>
+    <RouterProvider router={AppRouter} />
+  </Provider>
 );

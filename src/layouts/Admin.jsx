@@ -15,8 +15,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
-import { useLocation, Route, Switch } from "react-router-dom";
+import React, { Component, useState } from "react";
+import { useLocation, Route, Outlet } from "react-router-dom";
 import NotificationAlert from "react-notification-alert";
 
 import notify from "components/Notification/Notification";
@@ -25,9 +25,12 @@ import AdminNavbar from "components/Navbars/AdminNavbar";
 import Footer from "components/Footer/Footer";
 import Sidebar from "components/Sidebar/Sidebar";
 
-import routes from "routes.js";
+import indexer from "indexer.js";
 
 import sidebarImage from "assets/img/Kuru_Side.jpg";
+
+import { useDispatch } from "react-redux";
+import { processAction } from "Stores/ProcessReducer";
 
 function Admin() {
   const notificationAlertRefx = React.useRef(null);
@@ -36,21 +39,8 @@ function Admin() {
   const [hasImage, setHasImage] = React.useState(true);
   const location = useLocation();
   const mainPanel = React.useRef(null);
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            render={(props) => <prop.component {...props} />}
-            key={key}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-  };
+  const dispatch = useDispatch();
+ 
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
@@ -67,11 +57,11 @@ function Admin() {
 
   React.useEffect(() => {
     navigator.serviceWorker.addEventListener('message', (event) => {
-      // console.log(event);
+      
       if (event.data && event.data.action === 'dataFetched') {
         const fetchedData = event.data.data;
         // Perform actions based on the received data
-        console.log();
+        dispatch(processAction.yProcessed());
         notify('success', notificationAlertRefx, 'Process Finished');
       }
     });
@@ -83,11 +73,11 @@ function Admin() {
         <NotificationAlert ref={notificationAlertRefx} />
       </div>
       <div className="wrapper">
-        <Sidebar color={color} image={hasImage ? image : ""} routes={routes} />
+        <Sidebar color={color} image={hasImage ? image : ""} routes={indexer} />
         <div className="main-panel" ref={mainPanel}>
           <AdminNavbar />
           <div className="content">
-            <Switch>{getRoutes(routes)}</Switch>
+            <Outlet/>
           </div>
           <Footer />
         </div>

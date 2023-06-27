@@ -19,7 +19,7 @@ import React, { Component } from "react";
 import { useLocation } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 
-import routes from "routes.js";
+import indexer from "indexer.js";
 
 function Header() {
   const location = useLocation();
@@ -36,9 +36,9 @@ function Header() {
   };
 
   const getBrandText = () => {
-    for (let i = 0; i < routes.length; i++) {
-      if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
-        return routes[i].name;
+    for (let i = 0; i < indexer.length; i++) {
+      if (location.pathname.indexOf(indexer[i].path) !== -1) {
+        return indexer[i].name;
       }
     }
     return "Brand";

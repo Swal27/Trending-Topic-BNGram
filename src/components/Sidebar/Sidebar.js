@@ -57,14 +57,13 @@ function Sidebar({ color, image, routes }) {
                   className={
                     prop.upgrade
                       ? "active active-pro"
-                      : activeRoute(prop.layout + prop.path)
+                      : activeRoute(prop.path)
                   }
                   key={key}
                 >
                   <NavLink
-                    to={prop.layout + prop.path}
+                    to={prop.path}
                     className="nav-link"
-                    activeClassName="active"
                   >
                     <i className={prop.icon} />
                     <p>{prop.name}</p>
