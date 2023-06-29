@@ -27,7 +27,7 @@ import Sidebar from "components/Sidebar/Sidebar";
 
 import indexer from "indexer.js";
 
-import sidebarImage from "assets/img/Kuru_Side.jpg";
+import sidebarImage from "assets/img/SideBg.jpg";
 
 import { useDispatch } from "react-redux";
 import { processAction } from "Stores/ProcessReducer";

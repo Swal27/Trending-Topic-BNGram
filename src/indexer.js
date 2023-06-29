@@ -1,6 +1,5 @@
-import Dashboard from "views/Dashboard.js";
-import UserProfile from "views/UserProfile.js";
-import Icons from "views/Icons.js";
+import Dashboard from "views/Dashboard.jsx";
+import Icons from "views/Icons.jsx";
 
 import Puller from "views/Puller";
 import Processing from "views/Process";
@@ -18,7 +17,7 @@ const dashboardRoutes = [
   },
   {
     path: "processing",
-    name: "Processing",
+    name: "Pre-Process Process",
     icon: "nc-icon nc-grid-45",
     component: <Processing />,
   },
@@ -34,24 +33,24 @@ const dashboardRoutes = [
     icon: "nc-icon nc-notes",
     component: (<ProcessGuard><Result /></ProcessGuard>)
   },
-  {
-    path: "dashboard",
-    name: "Dashboard",
-    icon: "nc-icon nc-chart-pie-35",
-    component: <Dashboard />,
-  },
-  {
-    path: "user",
-    name: "User Profile",
-    icon: "nc-icon nc-circle-09",
-    component: <UserProfile />,
-  },
-  {
-    path: "icons",
-    name: "Icons",
-    icon: "nc-icon nc-atom",
-    component: <Icons />,
-  }
+  // {
+  //   path: "dashboard",
+  //   name: "Dashboard",
+  //   icon: "nc-icon nc-chart-pie-35",
+  //   component: <Dashboard />,
+  // },
+  // {
+  //   path: "user",
+  //   name: "User Profile",
+  //   icon: "nc-icon nc-circle-09",
+  //   component: <UserProfile />,
+  // },
+  // {
+  //   path: "icons",
+  //   name: "Icons",
+  //   icon: "nc-icon nc-atom",
+  //   component: <Icons />,
+  // }
 ];
 
 export default dashboardRoutes;

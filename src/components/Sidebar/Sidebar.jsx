@@ -42,11 +42,11 @@ function Sidebar({ color, image, routes }) {
             className="simple-text logo-mini mx-1"
           >
             <div className="logo-img">
-              <img src={require("assets/img/kururin-logo.png")} alt="..." />
+              <img src={require("assets/img/logoX.png")} alt="..." />
             </div>
           </a>
-          <a className="simple-text" href="#">
-            Kuru Kuruuu
+          <a className="simple-text text-left" href="#">
+            Tweet Trend Topic
           </a>
         </div>
         <Nav>

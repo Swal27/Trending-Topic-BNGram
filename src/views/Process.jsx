@@ -25,31 +25,75 @@ const Processing = () => {
 
     }
 
-    const columns = [
+    const ProcessColumns = [
         {
             name: 'No',
             selector: (row) => row.number
         },
         {
-            name: 'Text',
-            selector: (row) => row.text
+            name: 'Bigram',
+            selector: (row) => row.bigram
         },
         {
-            name: 'Time Slot',
-            selector: (row) => row.TimeSlot
+            name: 'Df (angka)',
+            selector: (row) => row.df
+        },
+        {
+            name: 'Idf (angka)',
+            selector: (row) => row.idf
+        },
+        {
+            name: 'DfIdf (float)',
+            selector: (row) => row.dfidf
         }
     ]
+    const PreprocessColumns = [
+        {
+            name: 'No',
+            selector: (row) => row.number
+        },
+        {
+            name: 'Username',
+            selector: (row) => row.username
+        },
+        {
+            name: 'Text',
+            selector: (row) => row.text_raw
+        },
+        {
+            name: 'Text Process',
+            selector: (row) => row.text_process
+        },
+    ]
 
-    const data = [
+    const Processdata = [
         {
             number: 1,
-            text: 'Beetlejuice',
-            TimeSlot: '1988',
+            bigram: 'Example Bigram 1',
+            df: 'Example df 1',
+            idf: 'Example idf 1',
+            dfidf: 'Example dfidf 1'
         },
         {
             number: 2,
-            text: 'Ghostbusters',
-            TimeSlot: '1984',
+            bigram: 'Example Bigram 2',
+            df: 'Example df 2',
+            idf: 'Example idf 2',
+            dfidf: 'Example dfidf 2'
+        },
+    ]
+    const Preprocessdata = [
+        {
+            number: 1,
+            username: 'Example Username 1',
+            text_raw: 'Example Text 1',
+            text_process: 'Example Text Process 1',
+        },
+        {
+            number: 2,
+            username: 'Example Username 2',
+            text_raw: 'Example Text 2',
+            text_process: 'Example Text Process 2',
         },
     ]
 
@@ -67,15 +111,37 @@ const Processing = () => {
                 <Col>
                     <Card className="strpied-tabled-with-hover">
                         <Card.Header>
-                            <Card.Title as="h4">Title</Card.Title>
+                            <Card.Title as="h4">Pre-process Table</Card.Title>
                         </Card.Header>
                         <Card.Body className="table-full-width table-responsive px-0">
 
                             <DataTable
-                                columns={columns}
+                                columns={ProcessColumns}
                                 pagination={true}
+                                striped={true}
+                                responsive={true}
                                 paginationPerPage={10}
-                                data={data}
+                                data={Processdata}
+                            />
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+            <Row className="my-2">
+                <Col>
+                    <Card className="strpied-tabled-with-hover">
+                        <Card.Header>
+                            <Card.Title as="h4">Process Table</Card.Title>
+                        </Card.Header>
+                        <Card.Body className="table-full-width table-responsive px-0">
+
+                            <DataTable
+                                columns={PreprocessColumns}
+                                pagination={true}
+                                striped={true}
+                                responsive={true}
+                                paginationPerPage={10}
+                                data={Preprocessdata}
                             />
                         </Card.Body>
                     </Card>

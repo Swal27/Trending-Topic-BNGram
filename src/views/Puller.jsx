@@ -1,11 +1,40 @@
 import React from "react";
 import { Button, Card, Col, Container, Form, FormControl, FormGroup, FormLabel, Row, Table } from "react-bootstrap";
+import DataTable from "react-data-table-component";
 
 const Puller = () => {
     const FormSubmited = (event) => {
         event.preventDefault();
         alert('asdasd')
     }
+
+    const columns = [
+        {
+            name: 'No',
+            selector: (row) => row.number
+        },
+        {
+            name: 'Text',
+            selector: (row) => row.text
+        },
+        {
+            name: 'Time Slot',
+            selector: (row) => row.TimeSlot
+        }
+    ]
+
+    const data = [
+        {
+            number: 1,
+            text: 'Example Text 1',
+            TimeSlot: 'Example TimeSlot 1',
+        },
+        {
+            number: 2,
+            text: 'Example Text 2',
+            TimeSlot: 'Example TimeSlot 2',
+        },
+    ]
     return (
         <Container fluid>
             <Row className="my-2">
@@ -26,32 +55,15 @@ const Puller = () => {
                             <Card.Title as="h4">Title</Card.Title>
                         </Card.Header>
                         <Card.Body className="table-full-width table-responsive px-0">
-                            <Table className="table-hover table-striped">
-                                <thead>
-                                    <tr>
-                                        <th className="border-0">No</th>
-                                        <th className="border-0">Text</th>
-                                        <th className="border-0">Time Slot</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>null</td>
-                                    <td>null</td>
-                                    <td>null</td>
-                                  </tr>
-                                  <tr>
-                                    <td>null</td>
-                                    <td>null</td>
-                                    <td>null</td>
-                                  </tr>
-                                  <tr>
-                                    <td>null</td>
-                                    <td>null</td>
-                                    <td>null</td>
-                                  </tr>
-                                </tbody>
-                            </Table>
+
+                            <DataTable
+                                columns={columns}
+                                pagination={true}
+                                striped={true}
+                                responsive={true}
+                                paginationPerPage={10}
+                                data={data}
+                            />
                         </Card.Body>
                     </Card>
                 </Col>

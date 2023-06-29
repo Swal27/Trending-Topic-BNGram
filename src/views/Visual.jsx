@@ -19,7 +19,7 @@ const Visual = () => {
                 <Col sm="9">
                     <div className="m-3">
 
-                        <Image src="https://media.distractify.com/brand-img/zcK7q9G7D/0x0/yazawa-nico-1626369451106.png" className="w-100"></Image>
+                        <Image src="http://localhost:3000/test2/dendrogram_2137.png" className="w-100 shadow"></Image>
                     </div>
                 </Col>
             </Row>

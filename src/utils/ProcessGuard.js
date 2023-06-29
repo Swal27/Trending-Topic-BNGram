@@ -15,7 +15,9 @@ const ProcessGuard = ({ children }) => {
     }, [isProccessed]);
 
     if (isBlocked) {
-        return <div>Block</div>;
+        return (<h3 className="text-center">
+            You have never performed Processing
+        </h3>);
     }
 
     return <>{children}</>;
