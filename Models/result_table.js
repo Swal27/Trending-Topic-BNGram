@@ -29,7 +29,7 @@ result_table.init({
         type: DataTypes.STRING,
         allowNull: false
     },
-    previos_bigram: {
+    previous_bigram: {
         type: DataTypes.STRING,
         allowNull: false
     },

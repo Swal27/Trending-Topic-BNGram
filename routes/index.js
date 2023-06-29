@@ -20,7 +20,7 @@ router.get('/ExecuteTweet', TweetExecuteProcess);
 router.get('/GetAllTweet', getAllTweet);
 router.delete('/DeleteAllTweet', TweetdeleteAllData);
 
-router.get('/ExecuteTweet', ResultExecuteProcess);
+router.get('/ExecuteResult', ResultExecuteProcess);
 router.get('/GetAllResult', getAllResult);
 router.get('/GetImageResult/:file', getAllResult);
 router.delete('/DeleteAllResult/:file', ResdeleteAllData);
