@@ -1,0 +1,57 @@
+{
+    "Cluster Ranking": {
+        "Cluster": "Cluster 52",
+        "DF-IDF Score": 6.0,
+        "Bigrams": [
+            {
+                "Bigram": "zaytun moeldoko",
+                "DF-IDF Score": 2.880757703367382
+            },
+            {
+                "Bigram": "partai moeldoko",
+                "DF-IDF Score": 3.0
+            },
+            {
+                "Bigram": "moeldoko ksp",
+                "DF-IDF Score": 2.880757703367382
+            },
+            {
+                "Bigram": "moeldoko begal",
+                "DF-IDF Score": 3.0
+            },
+            {
+                "Bigram": "jokowi tunda",
+                "DF-IDF Score": 2.7798852240873804
+            },
+            {
+                "Bigram": "tunda milu",
+                "DF-IDF Score": 2.7798852240873804
+            },
+            {
+                "Bigram": "al zaytun",
+                "DF-IDF Score": 6.0
+            },
+            {
+                "Bigram": "mikir moeldoko",
+                "DF-IDF Score": 3.0
+            },
+            {
+                "Bigram": "zaytun amp",
+                "DF-IDF Score": 2.7798852240873804
+            },
+            {
+                "Bigram": "bela al",
+                "DF-IDF Score": 3.0
+            },
+            {
+                "Bigram": "moeldoko bela",
+                "DF-IDF Score": 3.0
+            },
+            {
+                "Bigram": "begal partai",
+                "DF-IDF Score": 3.0
+            }
+        ]
+    },
+    "Joined Sentence": "zaytun moeldoko partai moeldoko moeldoko ksp moeldoko begal jokowi tunda tunda milu al zaytun mikir moeldoko zaytun amp bela al moeldoko bela begal partai"
+}

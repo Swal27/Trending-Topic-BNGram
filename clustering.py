@@ -5,6 +5,7 @@ from scipy.spatial.distance import squareform
 import os
 import json
 import mariadb
+import subprocess
 
 def fetch_dataset_from_database():
     # Connect to the database and fetch the dataset
@@ -74,7 +75,7 @@ def generate_dendrogram(tweet_bigram_matrix, bigrams, output_folder):
     plt.xlabel("Bigrams")
     plt.ylabel("Distance")
     plt.tight_layout()
-    output_file = os.path.join(output_folder, f"dendrogram_{last_iteration}.png")
+    output_file = os.path.join(output_folder, f"dendrogram.png")
     plt.savefig(output_file)
     plt.close()
 
@@ -128,5 +129,10 @@ desired_iteration = 2136
 clusters = extract_clusters_at_iteration(Z, bigrams, desired_iteration)
 
 # Save the clusters as JSON
-filename = f"clusters_iteration_{desired_iteration}.json"
+filename = f"clusters.json"
 save_clusters_as_json(clusters, output_folder, filename)
+
+def run_ranking():
+    subprocess.call(['python', 'ranking.py'])
+
+run_ranking()
