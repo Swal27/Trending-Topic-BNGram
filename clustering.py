@@ -124,8 +124,12 @@ output_folder = "C:/Users/ACER/Documents/Kuliah/Semester 6/KKP/Trending Topic/de
 # Generate the dendrogram
 Z = generate_dendrogram(tweet_bigram_matrix, bigrams, output_folder)
 
-# Extract clusters at the desired iteration
-desired_iteration = 2136
+# Determine the total number of iterations
+total_iterations = Z.shape[0]
+
+# Calculate the desired iteration (total_iterations - 1)
+desired_iteration = total_iterations - 1
+
 clusters = extract_clusters_at_iteration(Z, bigrams, desired_iteration)
 
 # Save the clusters as JSON

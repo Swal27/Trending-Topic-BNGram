@@ -4,36 +4,12 @@
         "DF-IDF Score": 6.0,
         "Bigrams": [
             {
-                "Bigram": "zaytun moeldoko",
-                "DF-IDF Score": 2.880757703367382
-            },
-            {
-                "Bigram": "partai moeldoko",
+                "Bigram": "moeldoko bela",
                 "DF-IDF Score": 3.0
-            },
-            {
-                "Bigram": "moeldoko ksp",
-                "DF-IDF Score": 2.880757703367382
-            },
-            {
-                "Bigram": "moeldoko begal",
-                "DF-IDF Score": 3.0
-            },
-            {
-                "Bigram": "jokowi tunda",
-                "DF-IDF Score": 2.7798852240873804
-            },
-            {
-                "Bigram": "tunda milu",
-                "DF-IDF Score": 2.7798852240873804
             },
             {
                 "Bigram": "al zaytun",
                 "DF-IDF Score": 6.0
-            },
-            {
-                "Bigram": "mikir moeldoko",
-                "DF-IDF Score": 3.0
             },
             {
                 "Bigram": "zaytun amp",
@@ -44,14 +20,38 @@
                 "DF-IDF Score": 3.0
             },
             {
-                "Bigram": "moeldoko bela",
+                "Bigram": "zaytun moeldoko",
+                "DF-IDF Score": 2.880757703367382
+            },
+            {
+                "Bigram": "moeldoko begal",
                 "DF-IDF Score": 3.0
+            },
+            {
+                "Bigram": "tunda milu",
+                "DF-IDF Score": 2.7798852240873804
             },
             {
                 "Bigram": "begal partai",
                 "DF-IDF Score": 3.0
+            },
+            {
+                "Bigram": "moeldoko ksp",
+                "DF-IDF Score": 2.880757703367382
+            },
+            {
+                "Bigram": "partai moeldoko",
+                "DF-IDF Score": 3.0
+            },
+            {
+                "Bigram": "jokowi tunda",
+                "DF-IDF Score": 2.7798852240873804
+            },
+            {
+                "Bigram": "mikir moeldoko",
+                "DF-IDF Score": 3.0
             }
         ]
     },
-    "Joined Sentence": "zaytun moeldoko partai moeldoko moeldoko ksp moeldoko begal jokowi tunda tunda milu al zaytun mikir moeldoko zaytun amp bela al moeldoko bela begal partai"
+    "Joined Sentence": "moeldoko bela al zaytun zaytun amp bela al zaytun moeldoko moeldoko begal tunda milu begal partai moeldoko ksp partai moeldoko jokowi tunda mikir moeldoko"
 }
