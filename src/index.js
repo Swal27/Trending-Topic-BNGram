@@ -31,7 +31,9 @@ import { isServiceWorkerRegistered, registerServiceWorker } from "utils/swRegist
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import ProcessReducer from "Stores/ProcessReducer";
+
+import DataReducer from "Stores/DataReducer";
+
 import AppRouter from "routes/router";
 
 
@@ -46,7 +48,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const store = configureStore({
   reducer: {
-    process: ProcessReducer,
+    perform: DataReducer
   }
 })
 

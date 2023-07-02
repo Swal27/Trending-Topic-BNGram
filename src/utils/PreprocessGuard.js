@@ -1,26 +1,25 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const ProcessGuard = ({ children }) => {
-    const { isProcessed } = useSelector((state) => state.perform);
+const PreprocessGuard = ({ children }) => {
+    const { isPreProcessed } = useSelector((state) => state.perform);
     const [isBlocked, setIsBlocked] = useState(false);
 
     useEffect(() => {
-        console.log(isProcessed);
-        if (!isProcessed) {
+        if (!isPreProcessed) {
             setIsBlocked(true);
         } else {
             setIsBlocked(false);
         }
-    }, [isProcessed]);
+    }, [isPreProcessed]);
 
     if (isBlocked) {
         return (<h3 className="text-center">
-            You have never performed Processing
+            You have never performed Pre processing
         </h3>);
     }
 
     return <>{children}</>;
 };
 
-export default ProcessGuard;
+export default PreprocessGuard;

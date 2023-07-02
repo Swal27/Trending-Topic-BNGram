@@ -1,12 +1,15 @@
 import Dashboard from "views/Dashboard.jsx";
-import Icons from "views/Icons.jsx";
 
 import Puller from "views/Puller";
 import Processing from "views/Process";
-import Result from "views/Result";
+import Results from "views/Result";
 import Visual from "views/Visual";
+import Preprocessing from "views/Preprocess";
 
 import ProcessGuard from "utils/ProcessGuard";
+import PullerGuard from "utils/PullerGuard";
+import PreprocessGuard from "utils/PreprocessGuard";
+import VisualGuard from "utils/VisualGuard";
 
 const dashboardRoutes = [
   {
@@ -16,10 +19,16 @@ const dashboardRoutes = [
     component: <Puller />
   },
   {
-    path: "processing",
-    name: "Pre-Process Process",
+    path: "pre-process",
+    name: "Pre Process",
     icon: "nc-icon nc-grid-45",
-    component: <Processing />,
+    component: (<PullerGuard><Preprocessing /></PullerGuard>),
+  },
+  {
+    path: "processing",
+    name: "Process",
+    icon: "nc-icon nc-app",
+    component: (<PreprocessGuard><Processing /></PreprocessGuard>),
   },
   {
     path: "visual",
@@ -31,7 +40,7 @@ const dashboardRoutes = [
     path: "result",
     name: "Result",
     icon: "nc-icon nc-notes",
-    component: (<ProcessGuard><Result /></ProcessGuard>)
+    component: (<VisualGuard><Results /></VisualGuard>)
   },
   // {
   //   path: "dashboard",
@@ -39,18 +48,6 @@ const dashboardRoutes = [
   //   icon: "nc-icon nc-chart-pie-35",
   //   component: <Dashboard />,
   // },
-  // {
-  //   path: "user",
-  //   name: "User Profile",
-  //   icon: "nc-icon nc-circle-09",
-  //   component: <UserProfile />,
-  // },
-  // {
-  //   path: "icons",
-  //   name: "Icons",
-  //   icon: "nc-icon nc-atom",
-  //   component: <Icons />,
-  // }
 ];
 
 export default dashboardRoutes;
