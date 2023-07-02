@@ -1,0 +1,9 @@
+mariadb
+tweepy
+sastrawi
+numpy
+matplotlib
+scipy
+subproses
+spacy
+json
