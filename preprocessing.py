@@ -22,7 +22,7 @@ stopword = stop_factory.create_stop_word_remover()
 
 temp = []
 mycursor = mydb.cursor()
-mycursor.execute("SELECT * FROM rawtweet")
+mycursor.execute("SELECT * FROM rawtweets")
 myresult = mycursor.fetchall()
 
 for x in myresult:
@@ -38,5 +38,5 @@ for x in myresult:
     # stopword
     hasil_stop = stopword.remove(hasil_stem)
 
-    mycursor.execute("UPDATE rawtweet SET text_process = %s WHERE id = %d", (hasil_stop, x[0]))
+    mycursor.execute("UPDATE rawtweets SET text_process = %s WHERE id = %d", (hasil_stop, x[0]))
     mydb.commit()

@@ -49,7 +49,7 @@ for i, tweet in enumerate(newTweets):
         text,
         timeslot_counter
     )
-    query = "SELECT * FROM rawtweet WHERE text_raw=%s"
+    query = "SELECT * FROM rawtweets WHERE text_raw=%s"
     mycursor.execute(query, (text,))
 
     x = [i for i in mycursor]
@@ -62,7 +62,7 @@ for i, tweet in enumerate(newTweets):
         timeslot_counter += 1
 
 sql = '''
-    INSERT INTO rawtweet (username, text_raw, time_slot) 
+    INSERT INTO rawtweets (username, text_raw, time_slot) 
     VALUES (%s, %s, %s)
 '''
 mycursor.executemany(sql, val)

@@ -15,7 +15,7 @@ mydb = mariadb.connect(
 
 # Fetch dataset from MySQL
 mycursor = mydb.cursor()
-mycursor.execute("SELECT text_process, time_slot FROM rawtweet ORDER BY time_slot")
+mycursor.execute("SELECT text_process, time_slot FROM rawtweets ORDER BY time_slot")
 rows = mycursor.fetchall()
 
 dataset = []
@@ -104,7 +104,7 @@ for i, inner_result in enumerate(result):
         print()
 
         # Insert the result into the database
-        insert_query = "INSERT INTO result_table (bigram, df, idf, dfidf, boost, previous_bigram, ttimeslot) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        insert_query = "INSERT INTO result_tables (bigram, df, idf, dfidf, boost, previous_bigram, ttimeslot) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         values = (
             item["bigram"],
             item["df"][1],  # Assuming df is a list [index, frequency]

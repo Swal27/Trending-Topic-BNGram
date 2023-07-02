@@ -16,11 +16,11 @@ mydb = mariadb.connect(
 cursor = mydb.cursor()
 
 # Fetch the dataset from the table raw_tweet and attribute text_process
-cursor.execute("SELECT text_process FROM rawtweet")
+cursor.execute("SELECT text_process FROM rawtweets")
 dataset = [row[0] for row in cursor.fetchall()]
 
-# Fetch the bigrams from the table result_table and attribute bigram
-cursor.execute("SELECT bigram FROM result_table")
+# Fetch the bigrams from the table result_tables and attribute bigram
+cursor.execute("SELECT bigram FROM result_tables")
 bigrams = [tuple(row[0].split()) for row in cursor.fetchall()]
 
 # Close the database connection

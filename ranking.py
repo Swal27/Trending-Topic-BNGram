@@ -22,7 +22,7 @@ for cluster_label, bigrams in clusters.items():
     for bigram in bigrams:
         # Retrieve the DF-IDF score from the database
         cursor = mydb.cursor()
-        cursor.execute("SELECT dfidf FROM result_table WHERE bigram = %s", (bigram,))
+        cursor.execute("SELECT dfidf FROM result_tables WHERE bigram = %s", (bigram,))
         dfidf_score = cursor.fetchone()
 
         if dfidf_score and float(dfidf_score[0]) > max_dfidf_score:
@@ -34,7 +34,7 @@ unique_bigrams = set(clusters[max_dfidf_cluster])
 cluster_bigrams = []
 for bigram in unique_bigrams:
     cursor = mydb.cursor()
-    cursor.execute("SELECT dfidf FROM result_table WHERE bigram = %s", (bigram,))
+    cursor.execute("SELECT dfidf FROM result_tables WHERE bigram = %s", (bigram,))
     dfidf_score = cursor.fetchone()
     dfidf = float(dfidf_score[0]) if dfidf_score else 0.0
     cluster_bigrams.append({"Bigram": bigram, "DF-IDF Score": dfidf})

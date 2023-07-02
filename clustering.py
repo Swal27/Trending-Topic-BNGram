@@ -16,7 +16,7 @@ def fetch_dataset_from_database():
         database="trending_topic"
     )
     cursor = mydb.cursor()
-    cursor.execute("SELECT text_process FROM rawtweet")
+    cursor.execute("SELECT text_process FROM rawtweets")
     dataset = [row[0] for row in cursor.fetchall()]
     mydb.close()
     return dataset
@@ -30,7 +30,7 @@ def fetch_bigrams_from_database():
         database="trending_topic"
     )
     cursor = mydb.cursor()
-    cursor.execute("SELECT bigram FROM result_table")
+    cursor.execute("SELECT bigram FROM result_tables")
     bigrams = [tuple(row[0].split()) for row in cursor.fetchall()]
     mydb.close()
     return bigrams
