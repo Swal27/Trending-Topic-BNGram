@@ -17,7 +17,6 @@
 }
 
 .show-move-disapear {
-  
 }
 
 @keyframes showmovedisapear {
@@ -27,4 +26,21 @@
   100% {
     left: -100%;
   }
+}
+
+.loading-wrapper {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.500);
+  width: 94%;
+  height: 94%;
+  margin-right: 50%;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.myLoading {
+  width: 5rem !important;
+  height: 5rem !important;
 }

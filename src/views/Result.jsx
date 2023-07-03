@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Card, Col, Container, Form, FormControl, FormGroup, FormLabel, Row, Table } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import notify from "components/Notification/Notification";
 import NotificationAlert from "react-notification-alert";
 import { useSelector } from "react-redux";
@@ -14,6 +14,7 @@ const Results = () => {
     const [sentence, setSentence] = useState('...');
     const [dataTable, setDataTable] = useState([]);
 
+    //get main data
     const getResults = () => {
         fetch(Result().GetTopResult, {
             method: 'GET',
@@ -50,7 +51,7 @@ const Results = () => {
                 fontSize: '20px'
             },
         }
-        
+
     };
 
     useEffect(() => {
@@ -58,6 +59,7 @@ const Results = () => {
             getResults();
         }
         navigator.serviceWorker.addEventListener('message', (event) => {
+            // if service worker availabel and recive data after fetch
             if (event.data && event.data.action === 'VisualFetched') {
                 getResults();
             }

@@ -39,7 +39,7 @@ class CustomMiniCard extends React.Component {
         }
 
         return (
-            <Col xl="3" md="6">
+            <Col>
                 <Card className="shadow">
                     <Card.Body>
                         <Row>

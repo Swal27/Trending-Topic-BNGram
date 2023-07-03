@@ -15,8 +15,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component, useState } from "react";
-import { useLocation, Route, Outlet } from "react-router-dom";
+import React from "react";
+import { useLocation, Outlet } from "react-router-dom";
 import NotificationAlert from "react-notification-alert";
 
 import notify from "components/Notification/Notification";
@@ -41,7 +41,7 @@ function Admin() {
   const location = useLocation();
   const mainPanel = React.useRef(null);
   const dispatch = useDispatch();
- 
+
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
@@ -58,7 +58,7 @@ function Admin() {
 
   React.useEffect(() => {
     navigator.serviceWorker.addEventListener('message', (event) => {
-      
+
       if (event.data && event.data.action === 'ProcessFetched') {
         const fetchedData = event.data.data;
         // Perform actions based on the received data
@@ -101,7 +101,7 @@ function Admin() {
         <div className="main-panel" ref={mainPanel}>
           <AdminNavbar />
           <div className="content">
-            <Outlet/>
+            <Outlet />
           </div>
           <Footer />
         </div>

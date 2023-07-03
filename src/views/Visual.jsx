@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Form, FormControl, FormGroup, FormLabel, Image, ProgressBar, Row, Table } from "react-bootstrap";
+import { Button, Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import notify from "components/Notification/Notification";
 import NotificationAlert from "react-notification-alert";
 import CustomMiniCard from "components/CustomCard/CustomMiniCard";
@@ -14,19 +14,23 @@ const Visual = () => {
     const { isVisual } = useSelector((state) => state.perform);
     const [totalCluster, setTotalCluster] = useState('0 Cluster');
     const [topCluster, setTopCluster] = useState('Cluster');
+    const [loader, setLoader] = useState('none');
 
+    //get main data
     const getData = () => {
+        setBImage('https://media.tenor.com/DHkIdy0a-UkAAAAC/loading-cat.gif');
+        setTopCluster('Cluster');
+        setTotalCluster('0 Cluster');
+        setLoader('flex');
+        dispatch(DataAction.nVisual());
+        // fetch when have service worker
         if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            setBImage('https://media.tenor.com/DHkIdy0a-UkAAAAC/loading-cat.gif');
-            setTopCluster('Cluster');
-            setTotalCluster('0 Cluster');
-            dispatch(DataAction.nVisual());
-            const URL = Result().ExecuteCluster; //nedd to add
+            setLoader('flex');
             navigator.serviceWorker.controller.postMessage({
                 action: 'fetchVisual', data: {
-                    url: 'http://localhost:3000/test', //neeed to be change
+                    url: Result().ExecuteCluster,
                     headerMethodBody: {
-                        method: "GET",
+                        method: "POST",
                         headers: {
                             'Content-Type': 'application/json'
                         }
@@ -35,14 +39,10 @@ const Visual = () => {
             });
             notify('info', notificationAlertRef, 'Starting Visual', 4);
         } else {
-            setBImage('https://media.tenor.com/DHkIdy0a-UkAAAAC/loading-cat.gif');
-            setTopCluster('Cluster');
-            setTotalCluster('0 Cluster');
-            dispatch(DataAction.nVisual());
-            const URL = Result().ExecuteCluster; //nedd to add
+            // fetch when not have service worker
             notify('info', notificationAlertRef, 'Starting Visual', 4);
-            fetch('http://localhost:3000/test', {
-                method: 'GET',
+            fetch(Result().ExecuteCluster, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -52,15 +52,18 @@ const Visual = () => {
                     notify('success', notificationAlertRef, 'Visual Finished');
                     setBImage(Result('dendrogram.png').GetImage);
                     TotalnResult();
+                    setLoader('none');
 
                 }
             }).catch((error) => {
                 console.log(error);
+                setLoader('none');
                 notify('danger', notificationAlertRef, 'Perform Failed');
             });
         }
     }
 
+    // get data for cluster
     const TotalnResult = () => {
         fetch(Result().GetTotalandTop, {
             method: 'GET',
@@ -82,11 +85,18 @@ const Visual = () => {
         if (isVisual) {
             setBImage(Result('dendrogram.png').GetImage);
             TotalnResult();
+            setLoader('none');
         }
         navigator.serviceWorker.addEventListener('message', (event) => {
+            // if service worker availabel and recive data after fetch
             if (event.data && event.data.action === 'VisualFetched') {
                 setBImage(Result('dendrogram.png').GetImage);
                 TotalnResult();
+                setLoader('none');
+            }
+            // if fetch error
+            if (event.data && event.data.action === 'actionFailed') {
+                setLoader('none');
             }
         });
     }, []);
@@ -100,18 +110,23 @@ const Visual = () => {
                 <Col sm="3">
                     <h1 className="text-uppercase">Cluster Candidate</h1>
                     <Button onClick={getData}>Get New Visual</Button>
+                    <h2 className="text-center">Cluster Info</h2>
+                    <Row className="justify-content-center">
+                        <CustomMiniCard name="Top Cluster" type="text" icon="nc-chart-pie-36" value={topCluster} />
+                    </Row>
+                    <Row>
+                        <CustomMiniCard name="Total Cluster" type="text" icon="nc-chart-pie-35" value={totalCluster} />
+                    </Row>
+
                 </Col>
                 <Col sm="9">
                     <div className="m-3">
+                        {loader == 'flex' ? (<div className="loading-wrapper" style={{ display: loader }}>
+                            <Spinner animation="border" size="xl" className="myLoading text-primary" />
+                        </div>) : (<Image src={bImage} className="w-100 shadow"></Image>)}
 
-                        <Image src={bImage} className="w-100 shadow"></Image>
                     </div>
                 </Col>
-            </Row>
-            <h2 className="text-center">Cluster Info</h2>
-            <Row className="justify-content-center">
-                <CustomMiniCard name="Top Cluster" type="text" icon="nc-chart-pie-36" value={topCluster} />
-                <CustomMiniCard name="Total Cluster" type="text" icon="nc-chart-pie-35" value={totalCluster} />
             </Row>
         </Container>
     </>

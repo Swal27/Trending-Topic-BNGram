@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Form, FormControl, FormGroup, FormLabel, Row, Table } from "react-bootstrap";
+import { Button, Card, Col, Container, Row, Spinner } from "react-bootstrap";
 import notify from "components/Notification/Notification";
 import NotificationAlert from "react-notification-alert";
 import { DataAction } from "Stores/DataReducer";
@@ -12,49 +12,54 @@ const Processing = () => {
     const notificationAlertRef = React.useRef(null);
     const dispatch = useDispatch();
     const { isProcessed } = useSelector((state) => state.perform);
+    const [loader, setLoader] = useState(false);
 
-
+    //get main data
     const getData = () => {
+        setDataTable([]);
+        setLoader(true);
+        dispatch(DataAction.nProcessed());
+        // fetch when have service worker
         if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            setDataTable([]);
-            dispatch(DataAction.nProcessed());
-            const URL = Result().ExecuteProcess; //nedd to add
             navigator.serviceWorker.controller.postMessage({
                 action: 'fetchProcess', data: {
-                    url: 'http://localhost:3000/test', //neeed to be change
+                    url: Result().ExecuteProcess, //neeed to be change
                     headerMethodBody: {
-                        method: "GET",
+                        method: "POST",
                         headers: {
-                            'Content-Type': 'application/json'
-                        }
+                            'Content-Type': 'application/json',
+                        },
+                        mode: 'cors'
                     }
                 }
             });
             notify('info', notificationAlertRef, 'Starting Process', 4);
         } else {
-            setDataTable([]);
-            dispatch(DataAction.nProcessed());
-            const URL = Result().ExecuteProcess; //nedd to add
+            // fetch when not have service worker
             notify('info', notificationAlertRef, 'Starting Process', 4);
-            fetch('http://localhost:3000/test', {
-                method: 'GET',
+            fetch(Result().ExecuteProcess, {
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
-                }
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors'
             }).then((response) => response.json()).then((result) => {
                 if (result.ok == true) {
                     dispatch(DataAction.yProcessed());
                     notify('success', notificationAlertRef, 'Process Finished');
                     GetDataProcess();
+                    setLoader(false);
 
                 }
             }).catch((error) => {
                 console.log(error);
                 notify('danger', notificationAlertRef, 'Perform Failed');
+                setLoader(false);
             });
         }
     }
 
+    // get data for table
     const GetDataProcess = () => {
         fetch(Result().GetAll, {
             method: 'GET',
@@ -105,10 +110,17 @@ const Processing = () => {
     useEffect(() => {
         if (isProcessed) {
             GetDataProcess();
+            setLoader(false);
         }
         navigator.serviceWorker.addEventListener('message', (event) => {
+            // if service worker availabel and recive data after fetch
             if (event.data && event.data.action === 'ProcessFetched') {
                 GetDataProcess();
+                setLoader(false);
+            }
+            // if fetch error
+            if (event.data && event.data.action === 'actionFailed') {
+                setLoader(false);
             }
         });
     }, []);
@@ -139,6 +151,8 @@ const Processing = () => {
                                 paginationPerPage={10}
                                 data={dataTable}
                                 customStyles={customStyles}
+                                progressComponent={<Spinner animation="border" size="xl" className="myLoading text-primary" />}
+                                progressPending={loader}
                             />
                         </Card.Body>
                     </Card>

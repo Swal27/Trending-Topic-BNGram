@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button, Card, Col, Container, Form, FormControl, FormGroup, FormLabel, Row, Table } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, FormControl, FormGroup, FormLabel, Row, Spinner } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import notify from "components/Notification/Notification";
@@ -12,11 +12,13 @@ const Puller = () => {
     const notificationAlertRef = useRef(null);
     const [dataTable, setDataTable] = useState();
     const { isPulled } = useSelector((state) => state.perform);
+    const [loader, setLoader] = useState(false);
 
     const [inputState, setInputState] = useState({
         fData: '',
     });
 
+    //handle when input change
     const handleChange = (event) => {
         setInputState((prevInputState) => ({
             ...prevInputState,
@@ -24,6 +26,7 @@ const Puller = () => {
         }));
     };
 
+    // get data for table
     const GetDataPull = () => {
         fetch(Tweet().GetPull, {
             method: 'GET',
@@ -40,51 +43,50 @@ const Puller = () => {
         })
     }
 
+    //get main data
     const FormSubmited = (event) => {
         event.preventDefault();
         if (inputState.fData != '') {
+            setDataTable([]);
+            dispatch(DataAction.nPulled());
+            setLoader(true);
+            // fetch when have service worker
             if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                setDataTable([]);
-                dispatch(DataAction.nPulled());
-                const URL = Tweet().ExecuteProcess; //nedd to add
                 navigator.serviceWorker.controller.postMessage({
                     action: 'fetchPull', data: {
-                        url: 'http://localhost:3000/test', //neeed to be change
+                        url: Tweet().ExecuteProcess, //neeed to be change
                         headerMethodBody: {
-                            method: "GET",
+                            method: "POST",
                             headers: {
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/json',
+                                'Access-Control-Allow-Origin': 'http://localhost:3001'
                             },
-                            body: {
-                                inputState
-                            }
+                            body: JSON.stringify(inputState)
                         }
                     }
                 });
                 notify('info', notificationAlertRef, 'Starting Puller', 4);
             } else {
-                setDataTable([]);
-                dispatch(DataAction.nPulled());
-                const URL = Tweet().ExecuteProcess; //nedd to add
+                // fetch when not have service worker
                 notify('info', notificationAlertRef, 'Starting Puller', 4);
-                fetch('http://localhost:3000/test', {
+                fetch(Tweet().ExecuteProcess, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: {
-                        inputState
-                    }
+                    body: JSON.stringify(inputState)
                 }).then((response) => response.json()).then((result) => {
                     if (result.ok == true) {
                         dispatch(DataAction.yPulled());
                         notify('success', notificationAlertRef, 'Pull Finished');
                         GetDataPull();
+                        setLoader(false);
 
                     }
                 }).catch((error) => {
                     console.log(error);
                     notify('danger', notificationAlertRef, 'Perform Failed');
+                    setLoader(false);
                 });
             }
         }
@@ -119,10 +121,17 @@ const Puller = () => {
     useEffect(() => {
         if (isPulled) {
             GetDataPull();
+            setLoader(false);
         }
         navigator.serviceWorker.addEventListener('message', (event) => {
+            // if service worker availabel and recive data after fetch
             if (event.data && event.data.action === 'PullFetched') {
                 GetDataPull();
+                setLoader(false);
+            }
+            // if fetch error
+            if (event.data && event.data.action === 'actionFailed') {
+                setLoader(false);
             }
         });
     }, []);
@@ -160,6 +169,8 @@ const Puller = () => {
                                     paginationPerPage={10}
                                     data={dataTable}
                                     customStyles={customStyles}
+                                    progressComponent={<Spinner animation="border" size="xl" className="myLoading text-primary" />}
+                                    progressPending={loader}
                                 />
                             </Card.Body>
                         </Card>
