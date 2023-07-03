@@ -1,11 +1,115 @@
 import rawtweet from '../Models/rawtweet.js'
+import sequelizes from '../config/db_config.js';
 import HeaderCheck from '../utils/headerCheck.js'
 import { exec } from 'child_process';
 
 export const TweetExecuteProcess = (req, res, next) => {
     if (HeaderCheck(req, res)) {
-        const command = 'python Python/hello.py';
-
+        if (req.body.fData != null) {
+            rawtweet.findAll().then((result) => {
+                if ((result != null) || (result != '')) {
+                    console.log('Table not empty');
+                    rawtweet.destroy({
+                        where: {},
+                        truncate: true
+                    }).then(() => {
+                        //add here
+                        const command = `python Python/tweet.py ${req.body.fData}`;
+                        exec(command, (error, stdout, stderr) => {
+                            if (error) {
+                                console.error(`Error: ${error.message}`);
+                                res.status(500).json({
+                                    ok: false,
+                                    code: 500,
+                                    data: false,
+                                    message: 'Internal Server Error 0',
+                                    error: error.message
+                                });
+                                return;
+                            }
+                            if (stderr) {
+                                console.error(`stderr: ${stderr}`);
+                                res.status(500).json({
+                                    ok: false,
+                                    code: 500,
+                                    data: false,
+                                    message: 'Internal Server Error 1',
+                                    error: stderr
+                                });
+                                return;
+                            }
+                            console.log(`stdout: ${stdout}`);
+                            res.status(200).json({
+                                ok: true,
+                                code: 200,
+                                data: false
+                            });
+                        });
+                    }).catch((error) => {
+                        res.status(500).json({
+                            ok: false,
+                            code: 500,
+                            data: false,
+                            message: 'Internal Server Error 2',
+                            error: error
+                        });
+                    });
+                } else {
+                    console.log('Table empty');
+                    const command = `python Python/tweet.py ${req.body.fData}`;
+                    exec(command, (error, stdout, stderr) => {
+                        if (error) {
+                            console.error(`Error: ${error.message}`);
+                            res.status(500).json({
+                                ok: false,
+                                code: 500,
+                                data: false,
+                                message: 'Internal Server Error 3',
+                                error: error.message
+                            });
+                            return;
+                        }
+                        if (stderr) {
+                            console.error(`stderr: ${stderr}`);
+                            res.status(500).json({
+                                ok: false,
+                                code: 500,
+                                data: false,
+                                message: 'Internal Server Error 4',
+                                error: stderr
+                            });
+                            return;
+                        }
+                        console.log(`stdout: ${stdout}`);
+                        res.status(200).json({
+                            ok: true,
+                            code: 200,
+                            data: false
+                        });
+                    });
+                }
+            }).catch((error) => {
+                res.status(500).json({
+                    ok: false,
+                    code: 500,
+                    data: false,
+                    message: 'Internal Server Error 5',
+                    error: error
+                })
+            })
+        } else {
+            res.status(400).json({
+                ok: false,
+                code: 417,
+                data: false,
+                message: 'Bad Request'
+            });
+        }
+    }
+}
+export const TweetExecutePreProcess = (req, res, next) => {
+    if (HeaderCheck(req, res)) {
+        const command = `python Python/preprocessing.py`;
         exec(command, (error, stdout, stderr) => {
             if (error) {
                 console.error(`Error: ${error.message}`);
@@ -25,9 +129,14 @@ export const TweetExecuteProcess = (req, res, next) => {
     }
 }
 
-export const getAllTweet = (req, res, next) => {
+export const getPullTweet = (req, res, next) => {
     if (HeaderCheck(req, res)) {
-        rawtweet.findAll().then((result) => {
+        rawtweet.findAll({
+            attributes: [
+                [sequelizes.literal('row_number() over (order by id)'), 'row_number'],
+                'text_raw', 'time_slot'
+            ]
+        }).then((result) => {
             res.status(200).json({
                 ok: true,
                 code: 200,
@@ -45,13 +154,18 @@ export const getAllTweet = (req, res, next) => {
     }
 }
 
-export const TweetdeleteAllData = (req, res, next) => {
+export const getPreProcessTweet = (req, res, next) => {
     if (HeaderCheck(req, res)) {
-        rawtweet.destroy().then(() => {
+        rawtweet.findAll({
+            attributes: [
+                [sequelizes.literal('row_number() over (order by id)'), 'row_number'],
+                'username', 'text_raw', 'text_process'
+            ]
+        }).then((result) => {
             res.status(200).json({
                 ok: true,
                 code: 200,
-                data: false,
+                data: result,
             });
         }).catch((error) => {
             res.status(500).json({
@@ -60,7 +174,7 @@ export const TweetdeleteAllData = (req, res, next) => {
                 data: false,
                 message: 'Internal Server Error',
                 error: error
-            });
-        });
+            })
+        })
     }
 }

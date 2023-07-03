@@ -2,5 +2,5 @@ import time
 
 print('hello world')
 print('waaa')
-time.sleep(5)
+time.sleep(10)
 print('cyaa')

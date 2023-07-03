@@ -1,0 +1,41 @@
+{
+    "Cluster Ranking": {
+        "Cluster": "Cluster 6",
+        "DF-IDF Score": 6.0,
+        "Bigrams": [
+            {
+                "Bigram": "kalla jk",
+                "DF-IDF Score": 6.0
+            },
+            {
+                "Bigram": "rajasa keok",
+                "DF-IDF Score": 6.0
+            },
+            {
+                "Bigram": "pasang hatta",
+                "DF-IDF Score": 6.0
+            },
+            {
+                "Bigram": "keok jokowijusuf",
+                "DF-IDF Score": 6.0
+            },
+            {
+                "Bigram": "hatta rajasa",
+                "DF-IDF Score": 4.0
+            },
+            {
+                "Bigram": "jokowijusuf kalla",
+                "DF-IDF Score": 6.0
+            },
+            {
+                "Bigram": "2014 pasang",
+                "DF-IDF Score": 4.0
+            },
+            {
+                "Bigram": "lalu 2014",
+                "DF-IDF Score": 6.0
+            }
+        ]
+    },
+    "Joined Sentence": "kalla jk rajasa keok pasang hatta keok jokowijusuf hatta rajasa jokowijusuf kalla 2014 pasang lalu 2014"
+}
