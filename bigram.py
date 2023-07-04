@@ -123,3 +123,5 @@ mydb.commit()
 
 # Close the database connection
 mydb.close()
+
+print('Selesai Nich hehe')

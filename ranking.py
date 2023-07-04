@@ -1,5 +1,6 @@
 import json
 import mariadb
+import os
 
 # Connect to MySQL
 mydb = mariadb.connect(
@@ -9,8 +10,13 @@ mydb = mariadb.connect(
     database="trending_topic"
 )
 
+#main folder
+main_folder = 'F:/Perkuliahan/Kelas/KKP/ServerSide/Python/dendogram fig'
+
+
 # Fetch the clusters from JSON file
-with open("dendogram fig/clusters.json", "r") as file:
+cluster_file = os.path.join(main_folder, f"clusters.json")
+with open(cluster_file, "r") as file:
     clusters = json.load(file)
 
 # Initialize variables to store the highest DF-IDF score and its corresponding cluster
@@ -56,7 +62,8 @@ result = {
 }
 
 # Save the result as JSON
-with open("dendogram fig/result.json", "w") as file:
+result_file = os.path.join(main_folder, f"result.json")
+with open(result_file, "w") as file:
     json.dump(result, file, indent=4)
 
 print("Result saved as 'dendogram fig/result.json'.")

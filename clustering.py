@@ -119,7 +119,7 @@ bigrams = fetch_bigrams_from_database()
 tweet_bigram_matrix = create_tweet_bigram_matrix(dataset, bigrams)
 
 # Specify the folder path to save the dendrogram figures
-output_folder = "C:/Users/ACER/Documents/Kuliah/Semester 6/KKP/Trending Topic/dendogram fig"
+output_folder = "F:/Perkuliahan/Kelas/KKP/ServerSide/Python/dendogram fig"
 
 # Generate the dendrogram
 Z = generate_dendrogram(tweet_bigram_matrix, bigrams, output_folder)
@@ -136,7 +136,8 @@ clusters = extract_clusters_at_iteration(Z, bigrams, desired_iteration)
 filename = f"clusters.json"
 save_clusters_as_json(clusters, output_folder, filename)
 
-def run_ranking():
-    subprocess.call(['python', 'ranking.py'])
+# def run_ranking():
+#     subprocess.call(['python', 'ranking.py'])  
+#     # hapus lurrr
 
-run_ranking()
+# run_ranking()
