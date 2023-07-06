@@ -6,6 +6,8 @@ import { DataAction } from "Stores/DataReducer";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
 import { Result } from "Global/FetchPath";
+import RefetchDataInBackground from "utils/ReFetch";
+import { Tweet } from "Global/FetchPath";
 
 const Processing = () => {
     const [dataTable, setDataTable] = useState();
@@ -19,44 +21,43 @@ const Processing = () => {
         setDataTable([]);
         setLoader(true);
         dispatch(DataAction.nProcessed());
-        // fetch when have service worker
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            navigator.serviceWorker.controller.postMessage({
-                action: 'fetchProcess', data: {
-                    url: Result().ExecuteProcess, //neeed to be change
-                    headerMethodBody: {
-                        method: "POST",
+        notify('info', notificationAlertRef, 'Starting Process', 4);
+        fetch(Result().ExecuteProcess, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+        }).then((response) => response.json()).then((result) => {
+            if (result.ok == true) {
+
+                RefetchDataInBackground({
+                    url2: Tweet().ReProgress,
+                    headerMethodBody2: {
+                        method: "GET",
                         headers: {
                             'Content-Type': 'application/json',
-                        },
-                        mode: 'cors'
+                            'If-Modified-Since': undefined,
+                            'If-None-Match': undefined
+                        }
                     }
-                }
-            });
-            notify('info', notificationAlertRef, 'Starting Process', 4);
-        } else {
-            // fetch when not have service worker
-            notify('info', notificationAlertRef, 'Starting Process', 4);
-            fetch(Result().ExecuteProcess, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                mode: 'cors'
-            }).then((response) => response.json()).then((result) => {
-                if (result.ok == true) {
+                }, result.data, 20).then(() => {
                     dispatch(DataAction.yProcessed());
                     notify('success', notificationAlertRef, 'Process Finished');
                     GetDataProcess();
                     setLoader(false);
+                }).catch((reject) => {
+                    console.log(reject);
+                    notify('danger', notificationAlertRef, 'Perform Failed');
+                    setLoader(false);
+                })
 
-                }
-            }).catch((error) => {
-                console.log(error);
-                notify('danger', notificationAlertRef, 'Perform Failed');
-                setLoader(false);
-            });
-        }
+            }
+        }).catch((error) => {
+            console.log(error);
+            notify('danger', notificationAlertRef, 'Perform Failed');
+            setLoader(false);
+        });
     }
 
     // get data for table
@@ -111,18 +112,22 @@ const Processing = () => {
         if (isProcessed) {
             GetDataProcess();
             setLoader(false);
+        } else {
+            fetch(Result().IsProcessed, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((response) => response.json()).then((result) => {
+                if (result.ok == true) {
+                    dispatch(DataAction.yProcessed());
+                    GetDataProcess();
+                }
+            }).catch((error) => {
+                console.log(error);
+                notify('danger', notificationAlertRef, 'Perform Failed');
+            });
         }
-        navigator.serviceWorker.addEventListener('message', (event) => {
-            // if service worker availabel and recive data after fetch
-            if (event.data && event.data.action === 'ProcessFetched') {
-                GetDataProcess();
-                setLoader(false);
-            }
-            // if fetch error
-            if (event.data && event.data.action === 'actionFailed') {
-                setLoader(false);
-            }
-        });
     }, []);
 
     return (<>

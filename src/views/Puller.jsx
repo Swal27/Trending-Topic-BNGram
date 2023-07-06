@@ -50,45 +50,27 @@ const Puller = () => {
             setDataTable([]);
             dispatch(DataAction.nPulled());
             setLoader(true);
-            // fetch when have service worker
-            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                navigator.serviceWorker.controller.postMessage({
-                    action: 'fetchPull', data: {
-                        url: Tweet().ExecuteProcess, //neeed to be change
-                        headerMethodBody: {
-                            method: "POST",
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Access-Control-Allow-Origin': 'http://localhost:3001'
-                            },
-                            body: JSON.stringify(inputState)
-                        }
-                    }
-                });
-                notify('info', notificationAlertRef, 'Starting Puller', 4);
-            } else {
-                // fetch when not have service worker
-                notify('info', notificationAlertRef, 'Starting Puller', 4);
-                fetch(Tweet().ExecuteProcess, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(inputState)
-                }).then((response) => response.json()).then((result) => {
-                    if (result.ok == true) {
-                        dispatch(DataAction.yPulled());
-                        notify('success', notificationAlertRef, 'Pull Finished');
-                        GetDataPull();
-                        setLoader(false);
+            notify('info', notificationAlertRef, 'Starting Puller', 4);
 
-                    }
-                }).catch((error) => {
-                    console.log(error);
-                    notify('danger', notificationAlertRef, 'Perform Failed');
+            fetch(Tweet().ExecuteProcess, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(inputState)
+            }).then((response) => response.json()).then((result) => {
+                if (result.ok == true) {
+                    dispatch(DataAction.yPulled());
+                    notify('success', notificationAlertRef, 'Pull Finished');
+                    GetDataPull();
                     setLoader(false);
-                });
-            }
+
+                }
+            }).catch((error) => {
+                console.log(error);
+                notify('danger', notificationAlertRef, 'Perform Failed');
+                setLoader(false);
+            });
         }
     }
 
@@ -122,18 +104,22 @@ const Puller = () => {
         if (isPulled) {
             GetDataPull();
             setLoader(false);
+        } else {
+            fetch(Tweet().IsPulled, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((response) => response.json()).then((result) => {
+                if (result.ok == true) {
+                    dispatch(DataAction.yPulled());
+                    GetDataPull();
+                }
+            }).catch((error) => {
+                console.log(error);
+                notify('danger', notificationAlertRef, 'Perform Failed');
+            });
         }
-        navigator.serviceWorker.addEventListener('message', (event) => {
-            // if service worker availabel and recive data after fetch
-            if (event.data && event.data.action === 'PullFetched') {
-                GetDataPull();
-                setLoader(false);
-            }
-            // if fetch error
-            if (event.data && event.data.action === 'actionFailed') {
-                setLoader(false);
-            }
-        });
     }, []);
 
     return (

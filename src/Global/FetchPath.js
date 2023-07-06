@@ -5,7 +5,10 @@ export const Tweet = () => {
     const ExecutePreProcess = `${BaseUrl}/ExecuteTweetPreProcess`;
     const GetPull = `${BaseUrl}/GetPullTweet`;
     const GetPreProcess = `${BaseUrl}/GetPreProcessTweet`;
-    return { ExecuteProcess, ExecutePreProcess, GetPull, GetPreProcess };
+    const ReProgress = `${BaseUrl}/reCheckProgress`;
+    const IsPulled = `${BaseUrl}/isPulled`;
+    const IsPreProcessed = `${BaseUrl}/isPreProcessed`;
+    return { ExecuteProcess, ExecutePreProcess, GetPull, GetPreProcess, ReProgress, IsPulled, IsPreProcessed};
 }
 
 export const Result = (data) => {
@@ -15,6 +18,7 @@ export const Result = (data) => {
     const GetImage = `${BaseUrl}/GetImageResult/${data}`;
     const GetTotalandTop = `${BaseUrl}/ClusterJson`;
     const GetTopResult = `${BaseUrl}/ResultJson`;
-    return { ExecuteProcess, ExecuteCluster, GetAll, GetImage, GetTotalandTop, GetTopResult };
+    const IsProcessed = `${BaseUrl}/isProcessed`;
+    return { ExecuteProcess, ExecuteCluster, GetAll, GetImage, GetTotalandTop, GetTopResult, IsProcessed };
 }
 

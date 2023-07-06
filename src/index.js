@@ -27,8 +27,6 @@ import "./assets/css/demo.css";
 import "./assets/css/my-css.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-import { isServiceWorkerRegistered, registerServiceWorker } from "utils/swRegister.js";
-
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 
@@ -37,12 +35,6 @@ import DataReducer from "Stores/DataReducer";
 import AppRouter from "routes/router";
 
 
-
-if (!isServiceWorkerRegistered() && 'serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    registerServiceWorker();
-  });
-}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

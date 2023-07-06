@@ -1,8 +1,13 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import dashboardRoutes from "indexer";
 import Admin from "layouts/Admin";
+import PageNotFound from "views/PageNotFound";
 
 const AppRouter = createBrowserRouter([
+    {
+        path: '/',
+        element:<Navigate to={'/puller'} replace/>
+    },
     {
         path: '/',
         element: <Admin />,
@@ -10,7 +15,11 @@ const AppRouter = createBrowserRouter([
             path: route.path,
             element: route.component
         }))
-    }
+    },
+    {
+        path: '*',
+        element: <PageNotFound />,
+    },
 ]);
 
 export default AppRouter;

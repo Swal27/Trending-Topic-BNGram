@@ -6,6 +6,8 @@ import CustomMiniCard from "components/CustomCard/CustomMiniCard";
 import { useDispatch, useSelector } from "react-redux";
 import { DataAction } from "Stores/DataReducer";
 import { Result } from "Global/FetchPath";
+import RefetchDataInBackground from "utils/ReFetch";
+import { Tweet } from "Global/FetchPath";
 
 const Visual = () => {
     const notificationAlertRef = React.useRef(null);
@@ -23,44 +25,44 @@ const Visual = () => {
         setTotalCluster('0 Cluster');
         setLoader('flex');
         dispatch(DataAction.nVisual());
-        // fetch when have service worker
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            setLoader('flex');
-            navigator.serviceWorker.controller.postMessage({
-                action: 'fetchVisual', data: {
-                    url: Result().ExecuteCluster,
-                    headerMethodBody: {
-                        method: "POST",
+
+        fetch(Result().ExecuteCluster, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+        }).then((response) => response.json()).then((result) => {
+            if (result.ok == true) {
+
+                RefetchDataInBackground({
+                    url2: Tweet().ReProgress,
+                    headerMethodBody2: {
+                        method: "GET",
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'If-Modified-Since': undefined,
+                            'If-None-Match': undefined
                         }
                     }
-                }
-            });
-            notify('info', notificationAlertRef, 'Starting Visual', 4);
-        } else {
-            // fetch when not have service worker
-            notify('info', notificationAlertRef, 'Starting Visual', 4);
-            fetch(Result().ExecuteCluster, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then((response) => response.json()).then((result) => {
-                if (result.ok == true) {
-                    dispatch(DataAction.nVisual());
+                }, result.data, 20).then(() => {
+                    dispatch(DataAction.yVisual());
                     notify('success', notificationAlertRef, 'Visual Finished');
                     setBImage(Result('dendrogram.png').GetImage);
                     TotalnResult();
                     setLoader('none');
+                }).catch((reject) => {
+                    console.log(reject);
+                    notify('danger', notificationAlertRef, 'Perform Failed');
+                    setLoader(false);
+                })
 
-                }
-            }).catch((error) => {
-                console.log(error);
-                setLoader('none');
-                notify('danger', notificationAlertRef, 'Perform Failed');
-            });
-        }
+            }
+        }).catch((error) => {
+            console.log(error);
+            notify('danger', notificationAlertRef, 'Perform Failed');
+            setLoader(false);
+        });
     }
 
     // get data for cluster
@@ -87,18 +89,6 @@ const Visual = () => {
             TotalnResult();
             setLoader('none');
         }
-        navigator.serviceWorker.addEventListener('message', (event) => {
-            // if service worker availabel and recive data after fetch
-            if (event.data && event.data.action === 'VisualFetched') {
-                setBImage(Result('dendrogram.png').GetImage);
-                TotalnResult();
-                setLoader('none');
-            }
-            // if fetch error
-            if (event.data && event.data.action === 'actionFailed') {
-                setLoader('none');
-            }
-        });
     }, []);
 
     return (<>

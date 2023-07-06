@@ -37,18 +37,24 @@ const Results = () => {
     const ProcessColumns = [
         {
             name: 'Bigram',
-            selector: (row) => row.Bigram
+            selector: (row) => row.Bigram,
+            width:'250px'
         },
         {
             name: 'DF-IDF Score',
-            selector: (row) => row['DF-IDF Score']
+            selector: (row) => row['DF-IDF Score'],
+            width:'170px'
+        },
+        {
+            name: 'Raw Text Tweet',
+            selector: (row) => row['raw_tweet']
         }
     ]
 
     const customStyles = {
         headCells: {
             style: {
-                fontSize: '20px'
+                fontSize: '20px',
             },
         }
 
@@ -58,12 +64,6 @@ const Results = () => {
         if (isVisual) {
             getResults();
         }
-        navigator.serviceWorker.addEventListener('message', (event) => {
-            // if service worker availabel and recive data after fetch
-            if (event.data && event.data.action === 'VisualFetched') {
-                getResults();
-            }
-        });
     }, []);
 
     return (<>

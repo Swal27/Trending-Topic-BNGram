@@ -57,38 +57,6 @@ function Admin() {
   }, [location]);
 
   React.useEffect(() => {
-    navigator.serviceWorker.addEventListener('message', (event) => {
-
-      if (event.data && event.data.action === 'ProcessFetched') {
-        const fetchedData = event.data.data;
-        // Perform actions based on the received data
-        dispatch(DataAction.yProcessed());
-        notify('success', notificationAlertRefx, 'Process Finished');
-      }
-      if (event.data && event.data.action === 'PullFetched') {
-        const fetchedData = event.data.data;
-        // Perform actions based on the received data
-        dispatch(DataAction.yPulled());
-        notify('success', notificationAlertRefx, 'Pull Finished');
-      }
-      if (event.data && event.data.action === 'PreprocessFetched') {
-        const fetchedData = event.data.data;
-        // Perform actions based on the received data
-        dispatch(DataAction.yPreProcessed());
-        notify('success', notificationAlertRefx, 'Preprocess Finished');
-      }
-      if (event.data && event.data.action === 'VisualFetched') {
-        const fetchedData = event.data.data;
-        // Perform actions based on the received data
-        dispatch(DataAction.yVisual());
-        notify('success', notificationAlertRefx, 'Visual Finished');
-      }
-      if (event.data && event.data.action === 'actionFailed') {
-        const error = event.data.data;
-        // Perform actions based on the received data
-        notify('danger', notificationAlertRefx, 'Perform Failed');
-      }
-    });
   }, [])
 
   return (
