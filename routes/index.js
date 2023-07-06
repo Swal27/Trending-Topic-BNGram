@@ -1,8 +1,8 @@
 import express from 'express';
 
 import { testo, testo2 } from '../Controllers/TestFile.js';
-import { TweetExecutePreProcess, TweetExecuteProcess, getPreProcessTweet, getPullTweet } from '../Controllers/TweetController.js';
-import { ClusterJson, ResdeleteAllData, ResultExecuteCluster, ResultExecuteProcess, ResultJson, getAllResult, getImageResult } from '../Controllers/ResultController.js';
+import { TweetExecutePreProcess, TweetExecuteProcess, getPreProcessTweet, getPullTweet, isPreProcessed, isPulled, reCheckProgress } from '../Controllers/TweetController.js';
+import { ClusterJson, ResultExecuteCluster, ResultExecuteProcess, ResultJson, getAllResult, getImageResult, isProcessed, } from '../Controllers/ResultController.js';
 
 
 const router = express.Router();
@@ -29,6 +29,11 @@ router.get('/GetImageResult/:file', getImageResult);
 router.get('/ClusterJson', ClusterJson);
 router.get('/ResultJson', ResultJson);
 
+router.get('/reCheckProgress/:id', reCheckProgress);
+
+router.get('/isPulled', isPulled);
+router.get('/isPreProcessed', isPreProcessed);
+router.get('/isProcessed', isProcessed);
 
 
 

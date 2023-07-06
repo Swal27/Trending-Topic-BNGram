@@ -19,7 +19,7 @@ rawtweet.init({
     },
     text_process: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     time_slot: {
         type: DataTypes.INTEGER,

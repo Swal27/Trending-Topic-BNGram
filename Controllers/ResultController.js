@@ -2,149 +2,169 @@ import result_table from "../Models/result_table.js";
 import HeaderCheck from "../utils/headerCheck.js";
 import path from 'path';
 import fs from 'fs';
-import { exec } from 'child_process';
+import { exec, spawn } from 'child_process';
 import sequelizes from "../config/db_config.js";
+import rawtweet from "../Models/rawtweet.js";
+import { Op } from "sequelize";
+import { nanoid } from "nanoid";
+import { ProgressCreateUpdate, ProgressDelete, ProgressRead } from "../utils/progress.js";
 
 const __dirname = path.resolve();
 
+const clusterPath = path.join(__dirname, '/Python/dendogram fig', 'clusters.json');
+const resultPath = path.join(__dirname, '/Python/dendogram fig', 'result.json');
+
 export const ResultExecuteProcess = (req, res, next) => {
     if (HeaderCheck(req, res)) {
+        const idProgress = nanoid(8);
         const executer = () => new Promise((resolve, reject) => {
-            result_table.findAll().then((result) => {
-                if ((result != null) || (result != '')) {
-                    console.log('Table not empty');
-                    result_table.destroy({
-                        where: {},
-                        truncate: true
-                    }).then(() => {
-                        const command = 'python Python/bigram.py';
-
-                        exec(command, (error, stdout, stderr) => {
-                            if (error) {
-                                reject(error);
-                                return;
-                            }
-                            if (stderr) {
-                                reject(stderr);
-                                return;
-                            }
-                            if (stdout) {
-                                resolve(stdout);
-                            }
-                        })
-                    }).catch((error) => {
-                        reject(error)
-                    })
-                } else {
-                    console.log('Table empty');
-                    const command = 'python Python/bigram.py';
-
-                    exec(command, (error, stdout, stderr) => {
-                        if (error) {
-                            reject(error)
-                            return;
-                        }
-                        if (stderr) {
-                            console.error(`stderr: ${stderr}`);
-                            reject(error);
-                            return;
-                        }
-                        if (stdout) {
-                            resolve(stdout);
-                        }
+            const command = 'python';
+            result_table.findAll()
+                .then((result) => {
+                    res.status(200).json({
+                        ok: true,
+                        code: 200,
+                        data: idProgress
                     });
-                }
-            }).catch((error) => {
-                reject(error);
-            })
+                    ProgressCreateUpdate(idProgress, 1);
+                    if (result != null && result != '') {
+                        console.log('Table not empty');
+                        result_table.destroy({
+                            where: {},
+                            truncate: true
+                        })
+                            .then(() => {
+
+                                const process = spawn(command, ['Python/bigram.py']);
+                                process.stdout.on('data', (data) => {
+                                    // console.log(data);
+                                });
+
+                                process.on('close', (code) => {
+                                    console.log(code);
+                                    if (code == 0) {
+                                        resolve(code);
+                                    }
+                                });
+
+                                process.stderr.on('data', (data) => {
+                                    reject(new Error(data.toString()));
+                                });
+
+                                process.on('error', (error) => {
+                                    reject(error);
+                                });
+                            })
+                            .catch((error) => {
+                                reject(error);
+                            });
+                    } else {
+                        console.log('Table empty');
+                        const process = spawn(command, ['Python/bigram.py']);
+
+                        process.stdout.on('data', (data) => {
+                            // console.log(data);
+                        });
+
+                        process.on('close', (code) => {
+                            console.log(code);
+                            if (code == 0) {
+                                resolve(code);
+
+                            }
+                        });
+
+                        process.stderr.on('data', (data) => {
+                            reject(new Error(data.toString()));
+                        });
+
+                        process.on('error', (error) => {
+                            reject(error);
+                        });
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });
         });
-        executer().then((out) => {
-            console.log('asdasdadasd');
-            res.status(200).json({
-                ok: true,
-                code: 200,
-                data: false
-            });
-        }).catch((error) => {
-            res.status(500).json({
-                ok: false,
-                code: 500,
-                data: false,
-                message: 'Internal Server Error 0',
-                error: error
+
+        executer()
+            .then((code) => {
+                ProgressCreateUpdate(idProgress, code)
             })
-        })
+            .catch((error) => {
+                console.log(error);
+                ProgressCreateUpdate(idProgress, 2);
+            });
+
     }
 }
 
 export const ResultExecuteCluster = (req, res, next) => {
     if (HeaderCheck(req, res)) {
-        const command = 'python Python/clustering.py';
+        const command = 'python';
+        const idProgress = nanoid(8);
+        res.status(200).json({
+            ok: true,
+            code: 200,
+            data: idProgress
+        });
+        ProgressCreateUpdate(idProgress, 1);
+        const executer1 = () => new Promise((resolve, reject) => {
+            const process = spawn(command, ['Python/clustering.py']);
 
-        exec(command, async (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Error: ${error.message}`);
-                res.status(500).json({
-                    ok: false,
-                    code: 500,
-                    data: false,
-                    message: 'Internal Server Error 0',
-                    error: error.message
-                })
-                return;
-            }
-            if (stderr) {
-                console.error(`stderr: ${stderr}`);
-                res.status(500).json({
-                    ok: false,
-                    code: 500,
-                    data: false,
-                    message: 'Internal Server Error 1',
-                    error: stderr
-                })
-                return;
-            }
-            console.log(`stdout: ${stdout}`);
-            // res.status(200).json({
-            //     ok: true,
-            //     code: 200,
-            //     data: false
-            // });
-            const command2 = 'python Python/ranking.py';
-            await exec(command2, async (error, stdout, stderr) => {
-                if (error) {
-                    console.error(`Error: ${error.message}`);
-                    res.status(500).json({
-                        ok: false,
-                        code: 500,
-                        data: false,
-                        message: 'Internal Server Error 2',
-                        error: error.message
-                    })
-                    return;
-                }
-                if (stderr) {
-                    console.error(`stderr: ${stderr}`);
-                    res.status(500).json({
-                        ok: false,
-                        code: 500,
-                        data: false,
-                        message: 'Internal Server Error 3',
-                        error: stderr
-                    })
-                    return;
-                }
-                console.log(`stdout: ${stdout}`);
-                await res.status(200).json({
-                    ok: true,
-                    code: 200,
-                    data: false
-                });
+            process.stdout.on('data', (data) => {
+                resolve(data.toString());
+            });
+
+            process.stderr.on('data', (data) => {
+                reject(new Error(data.toString()));
+            });
+
+            process.on('error', (error) => {
+                reject(error);
             });
         });
-    }
-}
 
+        const executer2 = () => new Promise((resolve, reject) => {
+            const process = spawn(command, ['Python/ranking.py']);
+
+            process.stdout.on('data', (data) => {
+                resolve(data.toString());
+            });
+
+            process.stderr.on('data', (data) => {
+                reject(new Error(data.toString()));
+            });
+
+            process.on('error', (error) => {
+                reject(error);
+            });
+        });
+
+        executer1().then(() => {
+            executer2().then(() => {
+                ClusterChanger(idProgress).then(() => {
+                    ResultChanger(idProgress).then(() => {
+                        ProgressCreateUpdate(idProgress, 0);
+                    }).catch((error) => {
+                        console.log(error);
+                        ProgressCreateUpdate(idProgress, 2);
+                    })
+                }).catch((error) => {
+                    console.log(error);
+                    ProgressCreateUpdate(idProgress, 2);
+                })
+            }).catch((error) => {
+                console.log(error);
+                ProgressCreateUpdate(idProgress, 2);
+            })
+        }).catch((error) => {
+            console.log(error);
+            ProgressCreateUpdate(idProgress, 2);
+        })
+    }
+};
 
 export const getAllResult = (req, res, next) => {
     if (HeaderCheck(req, res)) {
@@ -184,45 +204,8 @@ export const getImageResult = (req, res, next) => {
     }
 }
 
-export const ResdeleteAllData = (req, res, next) => {
-    if (HeaderCheck(req, res)) {
-        if (req.body.filename !== null) {
-            result_table.destroy().then(() => {
-                fs.unlink(`./Python/Images/${req.body.file}`, (error) => {
-                    if (error) {
-                        res.status(500).json({
-                            ok: false,
-                            code: 500,
-                            data: false,
-                            message: 'Failed To Delete File',
-                            error: error
-                        });
-                        return;
-                    }
-                    res.status(200).json({
-                        ok: true,
-                        code: 200,
-                        data: false,
-                    });
-                });
-            }).catch((error) => {
-                res.status(500).json({
-                    ok: false,
-                    code: 500,
-                    data: false,
-                    message: 'Internal Server Error',
-                    error: error
-                });
-            });
-        } else {
-            res.send('File Not Found');
-        }
-    }
-}
-
 export const ClusterJson = (req, res, next) => {
     if (HeaderCheck(req, res)) {
-        const clusterPath = path.join(__dirname, '/Python/dendogram fig', 'clusters.json');
         fs.readFile(clusterPath, 'utf8', (err, clusterdata) => {
             if (err) {
                 console.error('Error reading file:', err);
@@ -238,7 +221,8 @@ export const ClusterJson = (req, res, next) => {
 
             try {
                 const clusterJson = JSON.parse(clusterdata);
-                const resultPath = path.join(__dirname, '/Python/dendogram fig', 'result.json');
+
+                //
                 fs.readFile(resultPath, 'utf8', (err, resultdata) => {
                     if (err) {
                         console.error('Error reading file:', err);
@@ -291,37 +275,147 @@ export const ClusterJson = (req, res, next) => {
 
 export const ResultJson = (req, res, next) => {
     if (HeaderCheck(req, res)) {
-        const resultPath = path.join(__dirname, '/Python/dendogram fig', 'result.json');
-        fs.readFile(resultPath, 'utf8', (err, resultdata) => {
-            if (err) {
-                console.error('Error reading file:', err);
-                res.status(500).json({
-                    ok: false,
-                    code: 500,
-                    data: false,
-                    message: 'Internal Server Error',
-                    error: err
-                });
-                return;
-            }
+        if (HeaderCheck(req, res)) {
+            fs.readFile(resultPath, 'utf8', (err, resultdata) => {
+                if (err) {
+                    console.error('Error reading file:', err);
+                    res.status(500).json({
+                        ok: false,
+                        code: 500,
+                        data: false,
+                        message: 'Internal Server Error',
+                        error: err
+                    });
+                    return;
+                }
 
-            try {
+                try {
+                    res.status(200).json({
+                        ok: true,
+                        code: 200,
+                        data: JSON.parse(resultdata)
+                    });
+
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    res.status(500).json({
+                        ok: false,
+                        code: 500,
+                        data: false,
+                        message: 'Internal Server Error',
+                        error: error
+                    });
+                }
+            });
+        }
+    }
+}
+
+export const isProcessed = (req, res, next) => {
+    if (HeaderCheck(req, res)) {
+        result_table.count({
+            col: 'id',
+            distinct: true
+        }).then((result) => {
+            if (result > 0) {      
                 res.status(200).json({
                     ok: true,
                     code: 200,
-                    data: JSON.parse(resultdata)
-                });
-
-            } catch (error) {
-                console.error('Error parsing JSON:', error);
-                res.status(500).json({
+                    data: result
+                })
+            } else {
+                res.status(200).json({
                     ok: false,
-                    code: 500,
-                    data: false,
-                    message: 'Internal Server Error',
-                    error: error
-                });
+                    code: 200,
+                    data: false
+                })
             }
-        });
+        }).catch((error) => {
+            res.status(500).json({
+                ok: false,
+                code: 500,
+                data: false,
+                message: 'Internal Server Error',
+                error: error
+            })
+        })
     }
 }
+
+const ResultChanger = (id) => new Promise((resolve, reject) => {
+    fs.readFile(resultPath, 'utf8', (err, resultdata) => {
+        if (err) {
+            reject(err);
+            return;
+        }
+
+        try {
+            const parsedJson = JSON.parse(resultdata);
+            const bigrams = parsedJson['Cluster Ranking']['Bigrams'];
+
+            const promises = Object.keys(bigrams).map(bigramKey => {
+                const bigram = bigrams[bigramKey];
+                return rawtweet.findOne({
+                    attributes: ['text_raw'],
+                    where: {
+                        text_raw: {
+                            [Op.like]: `%${bigram.Bigram}%`
+                        }
+                    }
+                })
+                    .then(result => {
+                        bigram['raw_tweet'] = result ? result.dataValues.text_raw : '';
+                    })
+                    .catch(error => {
+                        throw error;
+                    });
+            });
+
+            Promise.all(promises)
+                .then(() => {
+                    parsedJson['id'] = id;
+                    const modifiedJson = JSON.stringify(parsedJson, null, 2);
+
+                    fs.writeFile(resultPath, modifiedJson, (err) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            fs.readFile(resultPath, 'utf8', (err, resultS) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    resolve(true);
+                                }
+                            });
+                        }
+                    });
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        } catch (error) {
+            reject(error);
+        }
+    });
+});
+
+
+const ClusterChanger = (id) => new Promise((resolve, rejects) => {
+    fs.readFile(clusterPath, 'utf8', (err, resultdata) => {
+        if (err) {
+            rejects(err)
+            return;
+        }
+        const parsedJson = JSON.parse(resultdata);
+        parsedJson['id'] = id;
+        const modifiedJson = JSON.stringify(parsedJson, null, 2);
+
+        fs.writeFile(clusterPath, modifiedJson, (err) => {
+            if (err) {
+                rejects(err);
+                return
+            }
+            resolve(true)
+        })
+    });
+});
