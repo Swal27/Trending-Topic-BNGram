@@ -1,5 +1,4 @@
 # Trending-Topic-BNGram
 
-This PROJECT IS WIP
-
-This Project make me wanna cryyyyy
+This is a final project of my Company Based Project - Kompascom
+This Project Build with React, Express and Python
