@@ -8,11 +8,14 @@ import { DataAction } from "Stores/DataReducer";
 import { Result } from "Global/FetchPath";
 import RefetchDataInBackground from "utils/ReFetch";
 import { Tweet } from "Global/FetchPath";
+import { disableSide } from "utils/DisablerSide";
+import { enableSide } from "utils/DisablerSide";
+import ImgNotAvailale from '../assets/img/no-image.jpg'
 
 const Visual = () => {
     const notificationAlertRef = React.useRef(null);
     const dispatch = useDispatch();
-    const [bImage, setBImage] = useState('https://media.tenor.com/DHkIdy0a-UkAAAAC/loading-cat.gif');
+    const [bImage, setBImage] = useState(ImgNotAvailale);
     const { isVisual } = useSelector((state) => state.perform);
     const [totalCluster, setTotalCluster] = useState('0 Cluster');
     const [topCluster, setTopCluster] = useState('Cluster');
@@ -20,11 +23,13 @@ const Visual = () => {
 
     //get main data
     const getData = () => {
-        setBImage('https://media.tenor.com/DHkIdy0a-UkAAAAC/loading-cat.gif');
+        setBImage(ImgNotAvailale);
         setTopCluster('Cluster');
         setTotalCluster('0 Cluster');
         setLoader('flex');
         dispatch(DataAction.nVisual());
+        disableSide();
+        notify('info', notificationAlertRef, 'Starting Visualization', 4);
 
         fetch(Result().ExecuteCluster, {
             method: 'POST',
@@ -51,10 +56,12 @@ const Visual = () => {
                     setBImage(Result('dendrogram.png').GetImage);
                     TotalnResult();
                     setLoader('none');
+                    enableSide();
                 }).catch((reject) => {
                     console.log(reject);
                     notify('danger', notificationAlertRef, 'Perform Failed');
                     setLoader(false);
+                    enableSide();
                 })
 
             }
@@ -62,6 +69,7 @@ const Visual = () => {
             console.log(error);
             notify('danger', notificationAlertRef, 'Perform Failed');
             setLoader(false);
+            enableSide();
         });
     }
 
@@ -110,7 +118,7 @@ const Visual = () => {
 
                 </Col>
                 <Col sm="9">
-                    <div className="m-3">
+                    <div className="m-3 d-flex justify-content-right">
                         {loader == 'flex' ? (<div className="loading-wrapper" style={{ display: loader }}>
                             <Spinner animation="border" size="xl" className="myLoading text-primary" />
                         </div>) : (<Image src={bImage} className="w-100 shadow"></Image>)}

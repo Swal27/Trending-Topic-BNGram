@@ -44,3 +44,8 @@
   width: 5rem !important;
   height: 5rem !important;
 }
+
+a.disabled {
+  pointer-events: none !important;
+  cursor: default !important;
+}

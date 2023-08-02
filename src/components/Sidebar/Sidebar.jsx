@@ -35,7 +35,7 @@ function Sidebar({ color, image, routes }) {
           backgroundImage: "url(" + image + ")"
         }}
       />
-      <div className="sidebar-wrapper">
+      <div className="sidebar-wrapper customSide">
         <div className="logo d-flex align-items-center justify-content-start">
           <a
             href="https://www.creative-tim.com?ref=lbd-sidebar"
@@ -63,7 +63,7 @@ function Sidebar({ color, image, routes }) {
                 >
                   <NavLink
                     to={prop.path}
-                    className="nav-link"
+                    className="nav-link customNavLink"
                   >
                     <i className={prop.icon} />
                     <p>{prop.name}</p>

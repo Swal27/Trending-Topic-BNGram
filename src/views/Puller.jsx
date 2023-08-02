@@ -6,6 +6,8 @@ import notify from "components/Notification/Notification";
 import NotificationAlert from "react-notification-alert";
 import { DataAction } from "Stores/DataReducer";
 import { Tweet } from "Global/FetchPath";
+import { disableSide } from "utils/DisablerSide";
+import { enableSide } from "utils/DisablerSide";
 
 const Puller = () => {
     const dispatch = useDispatch();
@@ -51,6 +53,7 @@ const Puller = () => {
             dispatch(DataAction.nPulled());
             setLoader(true);
             notify('info', notificationAlertRef, 'Starting Puller', 4);
+            disableSide();
 
             fetch(Tweet().ExecuteProcess, {
                 method: 'POST',
@@ -64,12 +67,14 @@ const Puller = () => {
                     notify('success', notificationAlertRef, 'Pull Finished');
                     GetDataPull();
                     setLoader(false);
+                    enableSide();
 
                 }
             }).catch((error) => {
                 console.log(error);
                 notify('danger', notificationAlertRef, 'Perform Failed');
                 setLoader(false);
+                enableSide();
             });
         }
     }

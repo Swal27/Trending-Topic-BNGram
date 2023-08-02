@@ -8,6 +8,7 @@ import DataTable from "react-data-table-component";
 import { Result } from "Global/FetchPath";
 import RefetchDataInBackground from "utils/ReFetch";
 import { Tweet } from "Global/FetchPath";
+import { enableSide } from "utils/DisablerSide";
 
 const Processing = () => {
     const [dataTable, setDataTable] = useState();
@@ -22,6 +23,7 @@ const Processing = () => {
         setLoader(true);
         dispatch(DataAction.nProcessed());
         notify('info', notificationAlertRef, 'Starting Process', 4);
+        enableSide();
         fetch(Result().ExecuteProcess, {
             method: 'POST',
             headers: {
@@ -46,10 +48,12 @@ const Processing = () => {
                     notify('success', notificationAlertRef, 'Process Finished');
                     GetDataProcess();
                     setLoader(false);
+                    enableSide();
                 }).catch((reject) => {
                     console.log(reject);
                     notify('danger', notificationAlertRef, 'Perform Failed');
                     setLoader(false);
+                    enableSide();
                 })
 
             }
@@ -57,6 +61,7 @@ const Processing = () => {
             console.log(error);
             notify('danger', notificationAlertRef, 'Perform Failed');
             setLoader(false);
+            enableSide();
         });
     }
 

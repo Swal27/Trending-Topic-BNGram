@@ -9,10 +9,7 @@ import { Result } from "Global/FetchPath";
 const Results = () => {
     const notificationAlertRef = useRef(null);
     const { isVisual } = useSelector((state) => state.perform);
-    const [cluster, setCluster] = useState('Cluster');
-    const [score, setScore] = useState(0);
-    const [sentence, setSentence] = useState('...');
-    const [dataTable, setDataTable] = useState([]);
+    const [theData, setTheData] = useState([]);
 
     //get main data
     const getResults = () => {
@@ -23,10 +20,7 @@ const Results = () => {
             }
         }).then((response) => response.json()).then((result) => {
             if (result.ok == true) {
-                setCluster(result.data['Cluster Ranking'].Cluster);
-                setScore(result.data['Cluster Ranking']['DF-IDF Score']);
-                setSentence(result.data['Joined Sentence']);
-                setDataTable(result.data['Cluster Ranking'].Bigrams);
+                setTheData(result.data['Cluster Rankings']);
             }
         }).catch((error) => {
             console.log(error);
@@ -38,18 +32,41 @@ const Results = () => {
         {
             name: 'Bigram',
             selector: (row) => row.Bigram,
-            width:'250px'
+            width: '250px'
         },
         {
             name: 'DF-IDF Score',
             selector: (row) => row['DF-IDF Score'],
-            width:'170px'
+            width: '170px'
         },
         {
             name: 'Raw Text Tweet',
             selector: (row) => row['raw_tweet']
+        },
+        {
+            name: 'Headline News',
+            selector: (row) => row['Headline']
         }
     ]
+
+    const ExpandedComponent = ({ data }) => {
+        return (
+            <Container fluid>
+                <Row>
+                    <Col md={2}>
+                        Raw Text Tweet :
+                    </Col>
+                    <Col>{data.raw_tweet}</Col>
+                </Row>
+                <Row>
+                    <Col md={2}>
+                        Headline News :
+                    </Col>
+                    <Col>{data.Headline}</Col>
+                </Row>
+            </Container>
+        )
+    }
 
     const customStyles = {
         headCells: {
@@ -71,34 +88,41 @@ const Results = () => {
             <NotificationAlert ref={notificationAlertRef} />
         </div>
         <Container fluid>
-            <h1 className="text-center">{cluster}</h1>
-            <h2 className="text-center">Score {score}</h2>
-            <h4 className="text-center">Trend Topic</h4>
-            <h4 className="text-center">{sentence}</h4>
+            {theData != '' ? (
+                <>
+                    {theData.map((Data, index) => (<>
+                        <h1 key={index} className="mb-0">{Data.Cluster}</h1>
+                        <h2 key={index} className="mt-0">Score {Data['Max DF-IDF Score']}</h2>
+                        <Row key={index} className="my-4">
+                            <Col>
+                                <Card className="strpied-tabled-with-hover">
+                                    <Card.Header>
+                                        <Card.Title as="h4">Bigrams Table</Card.Title>
+                                    </Card.Header>
+                                    <Card.Body className="table-full-width table-responsive px-0">
 
-            <Row className="my-4">
-                <Col>
-                    <Card className="strpied-tabled-with-hover">
-                        <Card.Header>
-                            <Card.Title as="h4">Bigrams Table</Card.Title>
-                        </Card.Header>
-                        <Card.Body className="table-full-width table-responsive px-0">
+                                        <DataTable
+                                            columns={ProcessColumns}
+                                            striped={true}
+                                            responsive={true}
+                                            data={Data.Bigrams.sort((a, b) => b["DF-IDF Score"] - a["DF-IDF Score"]).slice(0, 3)}
+                                            customStyles={customStyles}
+                                            expandableRows
+                                            expandOnRowClicked
+                                            expandableRowsComponent={ExpandedComponent}
 
-                            <DataTable
-                                columns={ProcessColumns}
-                                pagination={true}
-                                striped={true}
-                                responsive={true}
-                                paginationPerPage={10}
-                                data={dataTable}
-                                customStyles={customStyles}
+                                        />
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </Row>
+                    </>))}
+                </>
 
-                            />
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-
+            ) : (
+                <h1>No Data Loaded</h1>
+            )
+            }
         </Container>
     </>
     );

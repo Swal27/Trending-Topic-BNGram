@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
 import { Tweet } from "Global/FetchPath";
 import RefetchDataInBackground from "utils/ReFetch";
+import { enableSide } from "utils/DisablerSide";
+import { disableSide } from "utils/DisablerSide";
 
 const Preprocessing = () => {
     const notificationAlertRef = useRef(null);
@@ -21,6 +23,7 @@ const Preprocessing = () => {
         dispatch(DataAction.nPreProcessed());
         setLoader(true);
         notify('info', notificationAlertRef, 'Starting Pre-Process', 4);
+        disableSide();
         fetch(Tweet().ExecutePreProcess, {
             method: 'POST',
             headers: {
@@ -43,10 +46,12 @@ const Preprocessing = () => {
                     notify('success', notificationAlertRef, 'Preprocess Finished');
                     GetDataPreProcess();
                     setLoader(false);
+                    enableSide();
                 }).catch((reject) => {
                     console.log(reject);
                     notify('danger', notificationAlertRef, 'Perform Failed');
                     setLoader(false);
+                    enableSide();
                 })
 
             }
@@ -54,6 +59,7 @@ const Preprocessing = () => {
             console.log(error);
             notify('danger', notificationAlertRef, 'Perform Failed');
             setLoader(false);
+            enableSide();
         });
     }
 
