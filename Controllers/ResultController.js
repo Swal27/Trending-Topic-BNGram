@@ -243,7 +243,7 @@ export const ClusterJson = (req, res, next) => {
                             code: 200,
                             data: {
                                 totalCluster: Object.keys(clusterJson).length,
-                                topCluster: resultJson['Cluster Ranking'].Cluster
+                                topCluster: resultJson["Cluster Rankings"].map(clusterRank => clusterRank.Cluster.split(' ')[1]).join(',')
                             }
                         });
 
@@ -317,7 +317,7 @@ export const isProcessed = (req, res, next) => {
             col: 'id',
             distinct: true
         }).then((result) => {
-            if (result > 0) {      
+            if (result > 0) {
                 res.status(200).json({
                     ok: true,
                     code: 200,
@@ -351,31 +351,34 @@ const ResultChanger = (id) => new Promise((resolve, reject) => {
 
         try {
             const parsedJson = JSON.parse(resultdata);
-            const bigrams = parsedJson['Cluster Ranking']['Bigrams'];
+            const promises = [];
 
-            const promises = Object.keys(bigrams).map(bigramKey => {
-                const bigram = bigrams[bigramKey];
-                return rawtweet.findOne({
-                    attributes: ['text_raw'],
-                    where: {
-                        text_raw: {
-                            [Op.like]: `%${bigram.Bigram}%`
+            for (const clusterRanking of parsedJson['Cluster Rankings']) {
+                for (const bigram of clusterRanking.Bigrams) {
+                    const promise = rawtweet.findOne({
+                        attributes: ['text_raw'],
+                        where: {
+                            text_raw: {
+                                [Op.like]: `%${bigram.Bigram}%`
+                            }
                         }
-                    }
-                })
-                    .then(result => {
-                        bigram['raw_tweet'] = result ? result.dataValues.text_raw : '';
                     })
-                    .catch(error => {
-                        throw error;
-                    });
-            });
+                        .then(result => {
+                            bigram['raw_tweet'] = result ? result.dataValues.text_raw : '';
+                        })
+                        .catch(error => {
+                            reject(error);
+                            throw error;
+                        });
+
+                    promises.push(promise);
+                }
+            }
 
             Promise.all(promises)
                 .then(() => {
                     parsedJson['id'] = id;
                     const modifiedJson = JSON.stringify(parsedJson, null, 2);
-
                     fs.writeFile(resultPath, modifiedJson, (err) => {
                         if (err) {
                             reject(err);

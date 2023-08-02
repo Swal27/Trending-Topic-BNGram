@@ -1,75 +1,215 @@
 {
-  "Cluster Ranking": {
-    "Cluster": "Cluster 37",
-    "DF-IDF Score": 6,
-    "Bigrams": [
-      {
-        "Bigram": "meski bukan",
-        "DF-IDF Score": 6,
-        "raw_tweet": ""
-      },
-      {
-        "Bigram": "bukan purnawirawan",
-        "DF-IDF Score": 3,
-        "raw_tweet": "RT @__AnakKolong: Meskipun bukan \"anak kolong\"\n\nMeskipun bukan Jenderal\n\nMeskipun bukan purnawirawan TNI, pun bukan \"lebih TNI dari TNI\"\n\nS…"
-      },
-      {
-        "Bigram": "lebih tni",
-        "DF-IDF Score": 2,
-        "raw_tweet": "RT @__AnakKolong: Meskipun bukan \"anak kolong\"\n\nMeskipun bukan Jenderal\n\nMeskipun bukan purnawirawan TNI, pun bukan \"lebih TNI dari TNI\"\n\nS…"
-      },
-      {
-        "Bigram": "tni s",
-        "DF-IDF Score": 3,
-        "raw_tweet": ""
-      },
-      {
-        "Bigram": "bukan lebih",
-        "DF-IDF Score": 3,
-        "raw_tweet": ""
-      },
-      {
-        "Bigram": "kolong meski",
-        "DF-IDF Score": 3,
-        "raw_tweet": ""
-      },
-      {
-        "Bigram": "bukan anak",
-        "DF-IDF Score": 3,
-        "raw_tweet": ""
-      },
-      {
-        "Bigram": "bukan jenderal",
-        "DF-IDF Score": 2,
-        "raw_tweet": "RT @__AnakKolong: Meskipun bukan \"anak kolong\"\n\nMeskipun bukan Jenderal\n\nMeskipun bukan purnawirawan TNI, pun bukan \"lebih TNI dari TNI\"\n\nS…"
-      },
-      {
-        "Bigram": "jenderal meski",
-        "DF-IDF Score": 2,
-        "raw_tweet": ""
-      },
-      {
-        "Bigram": "purnawirawan tni",
-        "DF-IDF Score": 3,
-        "raw_tweet": "RT @__AnakKolong: Meskipun bukan \"anak kolong\"\n\nMeskipun bukan Jenderal\n\nMeskipun bukan purnawirawan TNI, pun bukan \"lebih TNI dari TNI\"\n\nS…"
-      },
-      {
-        "Bigram": "tni bukan",
-        "DF-IDF Score": 3,
-        "raw_tweet": ""
-      },
-      {
-        "Bigram": "tni tni",
-        "DF-IDF Score": 2,
-        "raw_tweet": ""
-      },
-      {
-        "Bigram": "anak kolong",
-        "DF-IDF Score": 3,
-        "raw_tweet": "RT @__AnakKolong: Meskipun bukan \"anak kolong\"\n\nMeskipun bukan Jenderal\n\nMeskipun bukan purnawirawan TNI, pun bukan \"lebih TNI dari TNI\"\n\nS…"
-      }
-    ]
-  },
-  "Joined Sentence": "meski bukan bukan purnawirawan lebih tni tni s bukan lebih kolong meski bukan anak bukan jenderal jenderal meski purnawirawan tni tni bukan tni tni anak kolong",
-  "id": "mFw2TDnF"
+  "Cluster Rankings": [
+    {
+      "Cluster": "Cluster 22",
+      "Max DF-IDF Score": 6,
+      "Bigrams": [
+        {
+          "Bigram": "zaytun luna",
+          "DF-IDF Score": 3,
+          "Headline": "Diperiksa Polisi, Ini Penyebab Lucky Hakim Tak Ikut Sholat di Al Zaytun Pimpinan Panji Gumilang - Banjarmasin Post",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "luna maya",
+          "DF-IDF Score": 3,
+          "Headline": "Ditanya Kedekatannya dengan Maxime Bouttier, Luna Maya: Minta Doanya Aja - Kompas.com - KOMPAS.com",
+          "raw_tweet": "RT @_palungmariana: PAHAM DINASTI SEJAK DI PARPOL\n\n[Utas]\n\nTren Twitter seperti Al Zaytun, Luna Maya, &amp; Titanic kembali tak memikat. Mendin…"
+        },
+        {
+          "Bigram": "parpol utas",
+          "DF-IDF Score": 3,
+          "Headline": "Partai Demokrat: Perjalanan Politik SBY hingga Guncangan dari Moeldoko - Pemilu Tempo.co",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "twitter al",
+          "DF-IDF Score": 3,
+          "Headline": "Tahun Baru Islam, Astronaut Titip Pesan Manis ke Warga Bumi - CNBC Indonesia",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "titanic tak",
+          "DF-IDF Score": 2,
+          "Headline": "Tiga Alasan Mengapa Titanic tak akan Pernah Dibangkitkan - Republika.id",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "dinasti sejak",
+          "DF-IDF Score": 3,
+          "Headline": "5 Negara Tertua di Dunia yang Masih Ada Hingga Sekarang - kumparan.com - kumparan.com",
+          "raw_tweet": "RT @_palungmariana: PAHAM DINASTI SEJAK DI PARPOL\n\n[Utas]\n\nTren Twitter seperti Al Zaytun, Luna Maya, &amp; Titanic kembali tak memikat. Mendin…"
+        },
+        {
+          "Bigram": "tak mikat",
+          "DF-IDF Score": 3,
+          "Headline": "Apa itu Miqat Haji dan Umrah? Ini Pengertian, Jenis dan Tempatnya untuk Jamaah Indonesia - parboaboa",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "sejak parpol",
+          "DF-IDF Score": 3,
+          "Headline": "Alarm sebelum Jadi Partai Gurem - KaltimPost",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "zaytun amp",
+          "DF-IDF Score": 2.7798852240873804,
+          "Headline": "Kabareskrim Pastikan Proses Penyidikan Kasus Ponpes Al Zaytun ... - RMOL ID",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "mikat din",
+          "DF-IDF Score": 2,
+          "Headline": "Kloter 13, 98, dan 99 Tutup Kedatangan Jemaah Haji Indonesia di Madinah - Rakyatku.Com",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "tren twitter",
+          "DF-IDF Score": 3,
+          "Headline": "Warganet yang Main Twitter Kini Bisa Dapat Bayaran, Bagaimana Caranya? - Kompas.com - KOMPAS.com",
+          "raw_tweet": "RT @_palungmariana: PAHAM DINASTI SEJAK DI PARPOL\n\n[Utas]\n\nTren Twitter seperti Al Zaytun, Luna Maya, &amp; Titanic kembali tak memikat. Mendin…"
+        },
+        {
+          "Bigram": "paham dinasti",
+          "DF-IDF Score": 3,
+          "Headline": "5 Negara Tertua di Dunia yang Masih Ada Hingga Sekarang - kumparan.com - kumparan.com",
+          "raw_tweet": "RT @_palungmariana: PAHAM DINASTI SEJAK DI PARPOL\n\n[Utas]\n\nTren Twitter seperti Al Zaytun, Luna Maya, &amp; Titanic kembali tak memikat. Mendin…"
+        },
+        {
+          "Bigram": "maya amp",
+          "DF-IDF Score": 3,
+          "Headline": "Kemenkominfo temukan 117 konten hoaks pada Juni 2023 - ANTARA",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "al zaytun",
+          "DF-IDF Score": 6,
+          "Headline": "Pemerintah Diminta Hati-hati Sikapi Kontroversi Ponpes Al Zaytun - Kompas.com - Nasional Kompas.com",
+          "raw_tweet": "RT @_palungmariana: PAHAM DINASTI SEJAK DI PARPOL\n\n[Utas]\n\nTren Twitter seperti Al Zaytun, Luna Maya, &amp; Titanic kembali tak memikat. Mendin…"
+        },
+        {
+          "Bigram": "utas tren",
+          "DF-IDF Score": 3,
+          "Headline": "4 Fakta Menarik Threads Instagram, Raih 5 Juta Pengguna dalam 4 ... - Liputan6.com",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "amp titanic",
+          "DF-IDF Score": 2,
+          "Headline": "Puing Kapal Selam Titanic Ditemukan, Lima Penumpang Dipastikan Tewas - detikInet",
+          "raw_tweet": ""
+        }
+      ]
+    },
+    {
+      "Cluster": "Cluster 58",
+      "Max DF-IDF Score": 4.5,
+      "Bigrams": [
+        {
+          "Bigram": "ganjar pranowo",
+          "DF-IDF Score": 4.5,
+          "Headline": "Bedah Makna Branding Kemeja Hitam Putih Ganjar Pranowo - CNN Indonesia",
+          "raw_tweet": "RT @rasa2086: Ganjar Pranowo Adalah Penerus Jokowi\n\nGanjar Pranowo dinilai mampu untuk melanjutkan program-program pemerintah presiden Joko…"
+        },
+        {
+          "Bigram": "lanjut programprogram",
+          "DF-IDF Score": 2,
+          "Headline": "Baru 3 Hari Jadi Wamen BUMN II, Rosan Mau Lakukan Ini - CNBC Indonesia",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "perintah jokowi",
+          "DF-IDF Score": 3,
+          "Headline": "Respons KPLP soal Perintah Presiden Jokowi Membentuk Indonesia Coast Guard - Tribunnews.com",
+          "raw_tweet": ""
+        }
+      ]
+    },
+    {
+      "Cluster": "Cluster 80",
+      "Max DF-IDF Score": 4.5,
+      "Bigrams": [
+        {
+          "Bigram": "jadi tugas",
+          "DF-IDF Score": 3,
+          "Headline": "Pahala Mansury Jadi Wamenlu, Dapat Tugas Diplomasi Ekonomi - CNBC Indonesia",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "jokowi tugas",
+          "DF-IDF Score": 3,
+          "Headline": "Sah! Jokowi Bentuk Badan Karantina Indonesia, Ini Fungsinya - CNBC Indonesia",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "ganjar past",
+          "DF-IDF Score": 2,
+          "Headline": "Megawati Perintahkan Kadernya Mundur jika Tak Patuh Menangkan ... - kompas.id",
+          "raw_tweet": "RT @__AnakKolong: DULU | \n\n\"Pak Jokowi, petugas partai ! \n\nSEKARANG | \n\n\"Pak Jokowi tidak pernah jadi petugas partai, kalau mas Ganjar past…"
+        },
+        {
+          "Bigram": "pernah jadi",
+          "DF-IDF Score": 3,
+          "Headline": "Tinggal di Rumah Reyot Tanpa Listrik, Putri Ngaku Pernah Jadi Model Dewasa - detikFinance",
+          "raw_tweet": "RT @__AnakKolong: DULU | \n\n\"Pak Jokowi, petugas partai ! \n\nSEKARANG | \n\n\"Pak Jokowi tidak pernah jadi petugas partai, kalau mas Ganjar past…"
+        },
+        {
+          "Bigram": "jokowi pak",
+          "DF-IDF Score": 2.880757703367382,
+          "Headline": "Tangisan Haru Ibu-Ibu di Seluma, Sambut Kedatangan Pak Jokowi - radarseluma.disway.com - Disway",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "pak jokowi",
+          "DF-IDF Score": 4.5,
+          "Headline": "PSI: Jokowi The Real King Maker di Pilpres 2024 - detikNews",
+          "raw_tweet": "RT @__AnakKolong: DULU | \n\n\"Pak Jokowi, petugas partai ! \n\nSEKARANG | \n\n\"Pak Jokowi tidak pernah jadi petugas partai, kalau mas Ganjar past…"
+        },
+        {
+          "Bigram": "partai sekarang",
+          "DF-IDF Score": 3,
+          "Headline": "Tetap Anies, Demokrat Buka Opsi Kerja Sama Gerindra Jika Pilpres 2 Putaran - detikNews",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "dulu pak",
+          "DF-IDF Score": 3,
+          "Headline": "Seloroh Prabowo: Dulu Pak Bima Takut Sama Saya, Tapi Sekarang ... - Republika Online",
+          "raw_tweet": "RT @FenisiaPhoenix: Dulu Pak Jokowi itu dikata²i sbg petugas partai, boneka partai, dll\nSekarang kalimat itu juga digunakan utk menyerang P…"
+        },
+        {
+          "Bigram": "jokowi pernah",
+          "DF-IDF Score": 3,
+          "Headline": "Jokowi-Surya Paloh Ternyata Pernah Rayakan Ultah Berdua, Hubungan Seperti Kakak-Adik - PosBelitung.co",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "pak joko",
+          "DF-IDF Score": 3,
+          "Headline": "Keterangan Pers Presiden Joko Widodo setelah Pelantikan Menteri ... - Sekretariat Negara",
+          "raw_tweet": "RT @__AnakKolong: DULU | \n\n\"Pak Jokowi, petugas partai ! \n\nSEKARANG | \n\n\"Pak Jokowi tidak pernah jadi petugas partai, kalau mas Ganjar past…"
+        },
+        {
+          "Bigram": "sekarang pak",
+          "DF-IDF Score": 3,
+          "Headline": "Keterangan Pers Presiden Joko Widodo setelah Pelantikan Menteri ... - Sekretariat Negara",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "partai kalau",
+          "DF-IDF Score": 2,
+          "Headline": "Tetap Anies, Demokrat Buka Opsi Kerja Sama Gerindra Jika Pilpres 2 Putaran - detikNews",
+          "raw_tweet": ""
+        },
+        {
+          "Bigram": "tugas partai",
+          "DF-IDF Score": 3,
+          "Headline": "Jember Bukan Lagi Kampung Halaman Politik Anang Hermansyah - beritajatim | Portal Berita Jawa Timur",
+          "raw_tweet": "RT @__AnakKolong: DULU | \n\n\"Pak Jokowi, petugas partai ! \n\nSEKARANG | \n\n\"Pak Jokowi tidak pernah jadi petugas partai, kalau mas Ganjar past…"
+        }
+      ]
+    }
+  ],
+  "id": "pRZuirrq"
 }

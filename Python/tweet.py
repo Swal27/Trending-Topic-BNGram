@@ -6,17 +6,20 @@ from datetime import datetime, timedelta, timezone
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
 
-consumer_key = 'QwLtAuYgoBW3VcaBnSagPtmov'
-consumer_secret = '4Cngo5irld3YcOxWyMDozBUUjAL3CDMMFq6UGpFxjglEuHzTCR'
-access_token = '2900925361-wLpVkMA8LUSnYSFQEQ4MUHtbCfueHvqrQIflcPj'
-access_secret = 'PTt2nVoDygfPpcHVT5xOsXRelgom5pepdqLTZHfzosVOh'
+consumer_key = 'q3WLwSV7AgBjWWHbozMj67a0T'
+consumer_secret = 'IJnkffl9nOYxXinNfWf9ejW3HwYJxZGN1vm6g5LPUmR1iKcOVG'
+access_token = '2900925361-akpv0O6ETbXdL7LY9GvM2GfJZrnCNJV6QjibX3C'
+access_secret = 'QqYb4XW4NFCoUUhAhPktuSOTQ4CaCiJk7NtaaNdh7uFRV'
 tweetsPerQry = 10
 maxTweets = 200
+hasarg = ""
 
 for arg in sys.argv:
     print(arg)
 
-hashtag = sys.argv[1]
+args = " ".join(sys.argv[1:])
+
+hashtag = args
 
 mydb = mariadb.connect(
     host="localhost",
@@ -32,7 +35,7 @@ api = tweepy.API(authentication, wait_on_rate_limit=True)
 maxId = -1
 tweetCount = 0
 mycursor = mydb.cursor()
-newTweets = tweepy.Cursor(api.search_tweets, q=hashtag).items(maxTweets)
+newTweets = tweepy.Cursor(api.search_tweets, q=hashtag, tweet_mode='extended').items(maxTweets)
 
 newTweets = [x for x in newTweets]
 
